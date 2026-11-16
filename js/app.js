@@ -53,6 +53,8 @@
 
   const WELLE = '<svg class="welle" viewBox="0 0 62 14" aria-hidden="true" focusable="false"><path d="M2 5c5-4 9-4 14 0s9 4 14 0 9-4 14 0 9 4 14 0M10 11c4-3 8-3 12 0s8 3 12 0 8-3 12 0" fill="none" stroke-width="1.6" stroke-linecap="round"/></svg>';
   const NURI = `<picture><source srcset="bilder/nuri-512.webp?b=${C.bildStand}" type="image/webp"><img class="nuri" src="bilder/nuri-512.jpg?b=${C.bildStand}" alt="Nuri, ein freundlicher Nautilus mit perlmuttweißer, rostbraun gestreifter Spiralschale, schwimmt ruhig im hellblauen Wasser." width="512" height="512"></picture>`;
+  /* Nuri auf der Startseite (kleiner, neben der Begrüßung) und groß beim Rundenende */
+  const NURI_START = `<picture><source srcset="bilder/nuri-160.webp?b=${C.bildStand}" type="image/webp"><img class="nuri nuri--start" src="bilder/nuri-160.jpg?b=${C.bildStand}" alt="" width="160" height="160"></picture>`;
   function kopf(titel, mitNuri = false) {
     return `<header class="kopf">
         <p class="wortmarke">${esc(C.name)}${WELLE}</p>
@@ -114,20 +116,8 @@
     if (p) { p.textContent = netzText(); p.hidden = !p.textContent; }
   });
 
-  /* Kleine Stationsbilder als Code-Grafik (Zierde, aria-hidden): der Strom von früher nach jetzt und Kacheln.
-     Die Zeitform steht nie nur als Farbe da, die Bilder sind reine Zierde (die Karte nennt die Station als Text). */
-  const SVG = inhalt => `<svg class="station__bild sym" viewBox="0 0 96 72" aria-hidden="true" focusable="false">${inhalt}</svg>`;
-  const STROM = '<path class="sym-strom" d="M8 58c14-6 26 6 40 0s26-6 40 0"/><path class="sym-strom sym-strom--pfeil" d="M82 52l7 6-7 6"/>';
-  const KACHEL = (x, y, b, t) => `<rect class="sym-kachel" x="${x}" y="${y}" width="${b}" height="18" rx="5"/><text class="sym-text" x="${x + b / 2}" y="${y + 13}">${t}</text>`;
-  const STATIONSBILD = {
-    erkennen: SVG(`${STROM}<circle class="sym-punkt" cx="20" cy="57" r="5"/><circle class="sym-punkt sym-punkt--hohl" cx="76" cy="57" r="5"/>${KACHEL(24, 14, 48, 'malte')}`),
-    praeteritum: SVG(`${STROM}${KACHEL(10, 18, 34, 'mal')}<path class="sym-plus" d="M48 27h6M51 24v6"/>${KACHEL(58, 18, 28, 'te')}`),
-    perfekt: SVG(`${STROM}${KACHEL(8, 18, 38, 'habe')}${KACHEL(50, 18, 40, 'gemalt')}`),
-    umschreiben: SVG(`${STROM}<path class="sym-zeile" d="M14 14h52M14 24h40M14 34h56"/>${KACHEL(58, 26, 30, 'lief')}`),
-    zeitfehler: SVG(`${STROM}<path class="sym-zeile" d="M12 16h30M12 28h22"/><circle class="sym-lupe" cx="60" cy="26" r="13"/><path class="sym-lupe sym-lupe--griff" d="M69 35l10 10"/>`),
-    stimmt: SVG(`${STROM}<path class="sym-frage" d="M40 16a8 8 0 1 1 12 7c-3 2-5 4-5 8"/><circle class="sym-punkt" cx="47" cy="40" r="2.6"/>`),
-    futur: SVG(`${STROM}${KACHEL(8, 18, 40, 'werde')}${KACHEL(52, 18, 36, 'malen')}`)
-  };
+  /* Stationsbilder: gemalte Canva-Motive (Dateien/Canva/HERKUNFT.md), reine Zierde, deshalb alt="" */
+  const kartenBild = id => `<picture><source srcset="bilder/karte-${id}.webp?b=${C.bildStand}" type="image/webp"><img class="station__foto" src="bilder/karte-${id}.jpg?b=${C.bildStand}" alt="" width="320" height="320" decoding="async"></picture>`;
   const BUCH = '<svg class="buch" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5c3-1.5 5.5-1.5 8 0v14c-2.5-1.5-5-1.5-8 0z"/><path d="M12 5c2.5-1.5 5-1.5 8 0v14c-3-1.5-5.5-1.5-8 0"/></svg>';
   const SCHLOSS = '<svg class="schloss" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 
@@ -146,19 +136,13 @@
   function ansichtStart() {
     const k = ST.aktiv();
     if (!k) { ansichtCode(); return; }
-    zeigen(`
-      ${kopf('Hallo, <span id="vorname"></span>!')}
-      <p id="netz-zeile" class="netz-zeile" role="status" hidden></p>
-      <section aria-labelledby="h-stationen">
-        <h2 id="h-stationen" class="nurvorlesen">Stationen</h2>
-        <ul class="stationen">
-          ${C.stationen.map(s => istLive(s) ? `
+    const karteHtml = s => (istLive(s) ? `
             <li>
               <button type="button" class="station station--live" data-aktion="station" data-id="${esc(s.id)}" aria-label="${esc(s.name)}: ${esc(s.kurz)}. ${stempelText(s.id)}">
                 <span class="station__name">${esc(s.name)}</span>
                 <span class="station__linie" aria-hidden="true"></span>
                 <span class="station__kurz">${esc(s.kurz)}</span>
-                ${STATIONSBILD[s.id] || ''}
+                ${kartenBild(s.id)}
                 ${stempelPunkte(s.id)}
               </button>
             </li>` : `
@@ -167,12 +151,33 @@
                 <h3 class="station__name">${esc(s.name)}</h3>
                 <span class="station__linie" aria-hidden="true"></span>
                 <p class="station__kurz">${esc(s.kurz)}</p>
-                ${STATIONSBILD[s.id] || ''}
+                ${kartenBild(s.id)}
                 <p class="station__bald">${SCHLOSS}Kommt bald</p>
               </div>
-            </li>`).join('')}
+            </li>`);
+    const zusatz = C.stationen.filter(s => s.zusatz);
+    zeigen(`
+      <header class="kopf kopf--start">
+        <p class="wortmarke">${esc(C.name)}${WELLE}</p>
+        <div class="begruessung">
+          ${NURI_START}
+          <div>
+            <h1>Hallo, <span id="vorname"></span>!</h1>
+            <p class="begruessung__satz">Wähle eine Station. Hier geht es um <b>Verben</b> und ihre <b>Zeitform</b>.</p>
+          </div>
+        </div>
+      </header>
+      <p id="netz-zeile" class="netz-zeile" role="status" hidden></p>
+      <section aria-labelledby="h-stationen">
+        <h2 id="h-stationen" class="nurvorlesen">Stationen für Klasse 3</h2>
+        <ul class="stationen">
+          ${C.stationen.filter(s => !s.zusatz).map(karteHtml).join('')}
         </ul>
       </section>
+      ${zusatz.length ? `<section class="zusatz" aria-labelledby="h-zusatz">
+        <h2 id="h-zusatz" class="zusatz__titel">Zusatz für Klasse 4</h2>
+        <ul class="stationen stationen--zusatz">${zusatz.map(karteHtml).join('')}</ul>
+      </section>` : ''}
       <p class="knopfreihe knopfreihe--mitte"><button type="button" class="knopf glas-knopf logbuch-knopf" data-aktion="logbuch">${BUCH}<span>Mein Logbuch</span><span class="logbuch-knopf__zahl">${ZE.logbuch.anzahlStempel()} von ${ZE.logbuch.moeglich()} Stempeln</span></button></p>
       ${ST.istVorschau ? '' : '<p class="knopfreihe knopfreihe--mitte"><button type="button" class="knopf glas-knopf" data-aktion="abmelden">Abmelden</button></p>'}
       ${erwachsene()}`, '');
@@ -187,8 +192,23 @@
   /* ---------- Stationen ---------- */
   /* Adresse mitführen (#erkennen), damit Neuladen dort bleibt */
   function adresse(h) {
-    try { history.replaceState(null, '', location.pathname + location.search + (h ? '#' + h : '')); } catch (e) { /* egal */ }
+    try {
+      const ziel = location.pathname + location.search + (h ? '#' + h : '');
+      /* Von der Startseite in eine Station: neuer Verlaufseintrag, damit Zurück (auch die Wischgeste) zur Startseite führt */
+      if (h && !location.hash) history.pushState({ ze: h }, '', ziel);
+      else history.replaceState(h ? { ze: h } : null, '', ziel);
+    } catch (e) { /* egal */ }
   }
+  /* Zurück/Vor im Browser: Ansicht passend zur Adresse zeigen (nur nach der Anmeldung) */
+  window.addEventListener('popstate', () => {
+    if (!ST.aktiv()) return;
+    const ziel = location.hash.slice(1);
+    const d = document.getElementById('station-dialog');
+    if (d && d.open) d.close();
+    if (ZE.stationen && ZE.stationen[ziel] && C.stationen.some(s => s.id === ziel && s.live)) stationOeffnen(ziel);
+    else if (ziel === 'logbuch') logbuchOeffnen();
+    else ansichtStart();
+  });
   let aktiveStation = null;
   const SPEICHER_FEHLT_KURZ = SPEICHER_FEHLT;
   /* Was eine Station von der App braucht */
@@ -196,6 +216,7 @@
     app, esc, zeigen: (h, t) => zeigen(h, t), melden: t => melden(t), ansagen: t => ansagen(t), adresse,
     zurueck: () => ansichtStart(),
     speicherFehlt: SPEICHER_FEHLT_KURZ,
+    nuriGross: `<picture><source srcset="bilder/nuri-512.webp?b=${C.bildStand}" type="image/webp"><img class="nuri-gross" src="bilder/nuri-512.jpg?b=${C.bildStand}" alt="" width="512" height="512"></picture>`,
     nuriKlein: `<picture><source srcset="bilder/nuri-160.webp?b=${C.bildStand}" type="image/webp"><img class="nuri-klein" src="bilder/nuri-160.jpg?b=${C.bildStand}" alt="" width="160" height="160"></picture>`,
     welle: WELLE
   };

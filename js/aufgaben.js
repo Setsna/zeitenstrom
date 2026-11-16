@@ -245,9 +245,10 @@
 
   /* ---------- Kann das stimmen? ---------- */
   function grund(zeit, teile) {
-    if (zeit === 'praesens') return `„${teile[0]}“ erzählt von jetzt. Das ist das Präsens.`;
-    if (zeit === 'praeteritum') return `„${teile[0]}“ ist ein Wort und erzählt von früher. Das ist das Präteritum.`;
-    return `„${teile[0]} … ${teile[1]}“ hat zwei Teile, mit haben oder sein. Das ist das Perfekt.`;
+    /* Kurz, mit dem Zeit-Zeichen davor (Design-Review 16.11.2026, Ingo: „kürzer, mit Zeit-Symbol“) */
+    if (zeit === 'praesens') return `„${teile[0]}“: jetzt.`;
+    if (zeit === 'praeteritum') return `„${teile[0]}“: früher, ein Wort.`;
+    return `„${teile[0]} … ${teile[1]}“: früher, mit haben oder sein.`;
   }
   /* Wie das Verb im Satz aussähe, damit die falschen Gründe zu diesem Satz passen */
   function stimmtLeicht(z, n) {
@@ -257,7 +258,7 @@
       const wahr = z.zahl(2) === 0;
       const behauptet = wahr ? zeit : z.eins(ZEITEN.filter(x => x !== zeit));
       const teile = SA().verbteile(s[zeit]);
-      const gruende = ZEITEN.map(x => ({ text: x === zeit ? grund(x, teile) : falscherGrund(x, teile), richtig: x === zeit }));
+      const gruende = ZEITEN.map(x => ({ text: x === zeit ? grund(x, teile) : falscherGrund(x, teile), richtig: x === zeit, zeit: x }));
       return {
         typ: 'stimmt', art: 'zeitform', verb: s.verb, zeit, behauptet,
         behauptung: `„${SA().text(s[zeit])}“ Das ist ${FACH[behauptet]}.`,
@@ -267,9 +268,9 @@
       };
     });
     function falscherGrund(x, teile) {
-      if (x === 'praesens') return `„${teile[0]}“ erzählt von jetzt. Das ist das Präsens.`;
-      if (x === 'praeteritum') return `„${teile.join(' ')}“ ist ein Wort und erzählt von früher. Das ist das Präteritum.`;
-      return `Das Verb hat zwei Teile, mit haben oder sein. Das ist das Perfekt.`;
+      if (x === 'praesens') return `„${teile[0]}“: jetzt.`;
+      if (x === 'praeteritum') return `„${teile.join(' ')}“: früher, ein Wort.`;
+      return 'Zwei Teile: früher, mit haben oder sein.';
     }
   }
   function stimmtMittel(z, n) {

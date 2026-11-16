@@ -26,73 +26,29 @@
   .kopf__werkzeug { width: 100%; justify-content: center; }
 }
 
-/* ---------- Fläche: Kiste groß, Werkzeuge daneben (quer) oder darunter (hoch) ---------- */
-.station-flaeche { display: grid; gap: var(--a-l); align-items: start; max-width: 68rem; margin: 0 auto; }
-@media (orientation: landscape) and (min-width: 820px) {
-  .station-flaeche { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
-  /* Die Kiste bleibt beim Scrollen der rechten Spalte stehen */
-  .station-flaeche > .buehne { position: sticky; top: var(--a-m); }
-}
-.diagramm .saeulen { max-width: 22rem; }
-.buehne {
-  position: relative; display: grid; gap: var(--a-m); justify-items: center; padding: var(--a-m);
-  border-radius: calc(48 * var(--s)); background: rgba(10, 52, 84, 0.62); border: 2px solid var(--glas-kante);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-}
-.kiste-figur { margin: 0; width: 100%; text-align: center; }
-.kiste-figur figcaption { color: var(--weiss); font-size: var(--gr-klein); margin-top: var(--a-xs); }
-.kisten-reihe { display: grid; grid-template-columns: 1fr 1fr; gap: var(--a-m); width: 100%; }
-.kisten-reihe--klein { grid-template-columns: repeat(3, 1fr); }
-.kisten-reihe--klein .kiste { max-width: 9rem; }
-.aufgabe { margin: 0; max-width: none; }
-.auftrag { margin: 0 0 0.2rem; color: var(--navy); font-size: var(--gr-text); }   /* Arbeitsauftrag in Lesegröße (6c) */
+
+
+/* Aufgabe mittig und lesbar breit, auch am Beamer (Design-Review 16.11.2026) */
+.aufgabe { margin: 0 auto; max-width: 52rem; }
+   /* Arbeitsauftrag in Lesegröße (6c) */
 .nuri-aussage { display: flex; align-items: center; gap: var(--a-s); }   /* Nuris Satz mit seinem Bild statt grauer Überzeile (6c) */
 .nuri-aussage .nuri-klein { flex: none; width: 3.25rem; height: 3.25rem; }
 .nuri-aussage > div { min-width: 0; }
 .aussage { font-size: var(--gr-text); font-weight: 700; margin: var(--a-xs) 0 var(--a-m); }
-.frage-klein { font-family: var(--schrift-text); font-weight: 700; font-size: var(--gr-label); margin: var(--a-m) 0 var(--a-s); }
+.frage-klein { font-family: var(--schrift-text); font-weight: 700; font-size: var(--gr-text); margin: var(--a-m) 0 var(--a-s); }
 
-/* ---------- Antworten ---------- */
-.skala, .begruendungen, .antworten, .farb-knoepfe { display: grid; gap: var(--a-s); }
-.skala { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.antworten--reihe { grid-template-columns: repeat(3, 1fr); }
-.farb-knoepfe { grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); }
-.skala-knopf, .begr-knopf, .antwort-knopf { text-align: left; padding: var(--a-s) var(--a-m); line-height: 1.25; }
-/* Skala: kleines Füllstand-Zeichen vor dem Wort (voll, drei Viertel, ein Viertel, leer).
-   Der Unterschied liegt in der Form, nicht in der Farbe. */
-.skala-knopf { --fuell: 0%; }
-.skala-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-align: center; }
-.skala-knopf::before {
-  content: ''; flex: none; display: inline-block; width: 0.7rem; height: 1.3rem; border: 2px solid currentColor; border-radius: 0.35rem;
-  background: linear-gradient(to top, currentColor var(--fuell), transparent var(--fuell));
-  vertical-align: middle; margin-right: 0.5rem;
-}
-.skala-knopf::before { margin-right: 0; }
-.skala-knopf--sicher, .ws-sicher th { --fuell: 100%; }
-.skala-knopf--wahrscheinlich, .ws-wahrscheinlich th { --fuell: 75%; }
-.skala-knopf--unwahrscheinlich, .ws-unwahrscheinlich th { --fuell: 25%; }
-.skala-knopf--unmoeglich::before, .ws-unmoeglich th::before { border-style: dashed; }
+.begruendungen, .antworten { display: grid; gap: var(--a-s); }
+
+.begr-knopf, .antwort-knopf { text-align: left; padding: var(--a-s) var(--a-m); line-height: 1.25; font-size: var(--gr-text); display: flex; align-items: center; gap: 0.6rem; }
 .knopf.ist-richtig, .knopf.ist-richtig[disabled] { background: var(--navy); color: var(--weiss); opacity: 1; }
-.ist-richtig::after { content: ''; display: inline-block; width: 0.36em; height: 0.72em; margin-left: 0.55em; border-right: 0.18em solid currentColor; border-bottom: 0.18em solid currentColor; transform: translateY(-0.1em) rotate(45deg); }   /* gezeichneter Haken (6c) */
-.farb-knopf { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0 var(--a-s); }
-.farb-knopf[aria-pressed="true"] { background: var(--navy); color: var(--weiss); }
-.kugel-symbol { width: 1.75rem; height: 1.75rem; flex: none; }
+.ist-richtig::after { content: ''; display: inline-block; width: 0.36em; height: 0.72em; margin-left: 0.55em; border-right: 0.18em solid currentColor; border-bottom: 0.18em solid currentColor; transform: translateY(-0.1em) rotate(45deg); }
+
 .rueckmeldung { min-height: 1.4em; font-weight: 700; margin: var(--a-m) 0 0; }
 .rueckmeldung:empty { min-height: 0; margin: 0; }
-.erklaerung { margin: var(--a-s) 0 0; }
 
 /* ---------- Ziehen, Strichliste, Diagramm ---------- */
 .ziehen { margin-top: var(--a-m); }
-.strichliste { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--a-xs); }
-.strichliste li { display: flex; align-items: center; gap: var(--a-m); min-height: 2rem; }
-.strichliste__farbe { display: inline-flex; align-items: center; gap: 0.4rem; min-width: 6rem; }
-.striche { font-family: var(--schrift-text); font-weight: 700; letter-spacing: 0.08em; color: var(--navy); }
-.fuenfer { text-decoration: line-through; text-decoration-thickness: 2px; margin-right: 0.6em; }
-.diagramm { margin-top: var(--a-m); }
-.hand { width: 4rem; height: 4rem; }
-.hand .kugel-symbol { width: 100%; height: 100%; }
-.hand--neu { animation: kugel-hoch 420ms var(--kurve); }
-@keyframes kugel-hoch { from { opacity: 0; transform: translateY(2.5rem) scale(0.6); } to { opacity: 1; transform: none; } }
+
 
 /* ---------- Stufenwahl, So geht's, Am Tisch, Rundenende ---------- */
 .stufen-liste { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--a-s); }
@@ -118,7 +74,7 @@
 .stempel__kugel { fill: var(--navy); }
 
 /* ---------- Dialog (Hilfe, Wörter) ---------- */
-.dialog { max-width: min(34rem, calc(100vw - 2rem)); border: 0; border-radius: var(--r-papier); padding: var(--a-l); background: var(--papier); color: var(--navy); box-shadow: 0 26px 50px -10px rgba(3, 20, 35, 0.5); }
+.dialog { max-width: min(52rem, calc(100vw - 2rem)); border: 0; border-radius: var(--r-papier); padding: var(--a-l); background: var(--papier); color: var(--navy); box-shadow: 0 26px 50px -10px rgba(3, 20, 35, 0.5); }
 .dialog::backdrop { background: rgba(6, 30, 48, 0.6); }
 .dialog h2 { margin-top: 0; font-size: var(--gr-title); }
 .tipp { display: flex; gap: var(--a-m); align-items: flex-start; }
@@ -129,129 +85,17 @@
 .wortspeicher__tabelle th, .wortspeicher__tabelle td { text-align: left; padding: var(--a-s) var(--a-m); border-bottom: 1px solid var(--papier-linie); }
 .wortspeicher__tabelle th { white-space: nowrap; }
 
-/* ---------- Glücksrad (js/rad.js) ---------- */
-.rad { display: block; width: 100%; max-width: 24rem; height: auto; margin: 0 auto; }
-.rad--klein { max-width: 9rem; }
-/* Kein transform-origin per CSS: Er würde auch auf das Drehattribut wirken und den Drehpunkt doppelt verschieben.
-   Der Drehpunkt für die Animation steht in den Keyframes (js/rad.js). */
-.rad__rand { fill: #7a5536; stroke: #5c3e26; stroke-width: 2; }
-.rad__grund.k-blau { fill: var(--kugel-blau); } .rad__grund.k-rot { fill: var(--kugel-rot); }
-.rad__grund.k-gelb { fill: var(--kugel-gelb); } .rad__grund.k-gruen { fill: var(--kugel-gruen); }
-.rad__grund.k-zahl { fill: #e9e2cf; }
-.rad__leer { fill: rgba(255, 255, 255, 0.08); }
-.rad__muster.m-streifen { fill: url(#m-streifen); } .rad__muster.m-punkte { fill: url(#m-punkte); } .rad__muster.m-karo { fill: url(#m-karo); }
-.rad__linie { fill: none; stroke: rgba(255, 255, 255, 0.85); stroke-width: 2; }
-.rad__feld--leer .rad__linie { stroke-dasharray: 6 5; stroke: rgba(255, 255, 255, 0.6); }
-.rad__feld--blass { opacity: 0.28; }
-.rad__nabe { fill: #e9e2cf; stroke: #5c3e26; stroke-width: 2; }
-.rad__zeiger { fill: var(--navy); stroke: var(--weiss); stroke-width: 2.5; stroke-linejoin: round; }
-.rad__zahl { font: 700 22px var(--schrift-text); fill: var(--navy); text-anchor: middle; }
-.rad__nummer { font: 700 18px var(--schrift-text); fill: #fff; stroke: rgba(10, 30, 45, 0.85); stroke-width: 3; paint-order: stroke; text-anchor: middle; }
-
-.rad-ergebnis { margin: 0; color: var(--weiss); font-size: var(--gr-text); font-weight: 700; min-height: 1.4em; text-align: center; }
-.dreh-knopf { min-height: max(56px, calc(72 * var(--s))); padding: 0 var(--a-xl); font-size: var(--gr-text); }
-.diagramme--zwei { display: grid; grid-template-columns: 1fr 1fr; gap: var(--a-m); }
-@media (max-width: 560px) { .diagramme--zwei { grid-template-columns: 1fr; } }
 .antwort-knopf[aria-pressed="true"] { background: var(--navy); color: var(--weiss); }
-.kisten-reihe--klein .rad--klein { max-width: 12rem; }
 
-/* ---------- Würfel (js/wuerfel.js) ---------- */
-.wuerfel { width: 5.5rem; height: 5.5rem; display: inline-block; }
-.wuerfel--klein { width: 2.5rem; height: 2.5rem; }
-.wuerfel--blass { opacity: 0.3; }
-.wuerfel__koerper { fill: #f3ecdc; stroke: #8a7a5c; stroke-width: 3; }
-.wuerfel__auge { fill: var(--navy); }
-.wuerfel-seiten { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
-.wuerfel-reihe { display: flex; gap: var(--a-m); justify-content: center; }
-.wuerfel-reihe .wuerfel { width: max(5.5rem, calc(120 * var(--s))); height: max(5.5rem, calc(120 * var(--s))); }
-.buehne .wuerfel-seiten { background: rgba(255, 255, 255, 0.12); border-radius: var(--r-papier); padding: var(--a-s); }
-
-/* Zahlen und Summen zum Vermuten */
-.zahl-knoepfe { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--a-s); }
-.zahl-knoepfe--summen { grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr)); }
-.zahl-knopf { padding: 0; font-size: var(--gr-text); font-variant-numeric: tabular-nums; }
-.zahl-knopf--breit { grid-column: 1 / -1; font-size: var(--gr-label); padding: var(--a-s) var(--a-m); }
-.zahl-knopf[aria-pressed="true"] { background: var(--navy); color: var(--weiss); }
 .antworten--zwei { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-/* Strichliste für 11 Summen in zwei Spalten */
-.strichliste--zwei { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(6, auto); grid-auto-flow: column; column-gap: var(--a-l); }
-.diagramm--breit .saeulen { max-width: 36rem; }
-.strichliste__zahl { min-width: 2.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-@media (max-width: 560px) { .strichliste--zwei { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; } }
-
-/* Alle Würfe: 6 × 6-Gitter */
-.wurf-gitter { border-collapse: separate; border-spacing: 0.3rem; margin: 0 auto; }
-.wurf-gitter th { font-weight: 700; padding: 0 0.2rem; text-align: center; color: var(--tinte-leise); }
-.wurf-gitter td { padding: 0; }
-.gitter-knopf { min-width: var(--tippen); min-height: var(--tippen); width: 100%; padding: 0 0.3rem; font-size: var(--gr-klein); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.gitter-knopf[aria-pressed="true"] { background: var(--navy); color: var(--weiss); }
-.gitter-knopf.ist-richtig::after { content: none; }
-.gitter-knopf.ist-richtig { outline: 3px solid var(--welle); outline-offset: 1px; }
-
-/* Tabelle der Würfe und Spielstand auf der Bühne */
-.buehne .wege-tabelle, .spiel-stand { background: var(--papier); color: var(--navy); border-radius: 0.6rem; }
-.wege-tabelle td:nth-child(2) { text-align: left; }
-.spiel-stand { padding: var(--a-s) var(--a-m); font-size: var(--gr-text); }
-.spiel-stand p { margin: 0.25rem 0; }
-.spiel-text { margin: var(--a-s) 0 0; }
-/* Viele Summen: Tabelle darf nicht die Seite verbreitern */
-.station-flaeche > * { min-width: 0; }
-.diagramm { min-width: 0; overflow-x: auto; }
-.diagramm--breit .haeufigkeiten th, .diagramm--breit .haeufigkeiten td { padding: 0.25rem 0.45rem; }
-.buehne .wege-tabelle caption { color: var(--weiss); }
-
-/* ---------- Münze (js/muenze.js) ---------- */
-.muenze { width: 6rem; height: 6rem; display: inline-block; }
-.muenze--klein { width: 2.75rem; height: 2.75rem; }
-.muenze--blass { opacity: 0.3; }
-.muenze__rand { fill: #b8925a; stroke: #7d5f33; stroke-width: 2; }
-.muenze__riffel line { stroke: #8a6a3b; stroke-width: 1.4; }
-.muenze__feld { fill: #e0c48f; stroke: #9a7744; stroke-width: 1.5; }
-.muenze__linie { fill: none; stroke: #5a4223; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
-.muenze__linie--fein { stroke-width: 1.6; opacity: 0.7; }
-.muenze__voll { fill: #5a4223; }
-.muenze__ziffer { fill: none; stroke: #5a4223; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
-.muenze-seiten { display: flex; gap: 0.75rem; justify-content: center; }
-
-/* ---------- Station Münzwurf ---------- */
-.muenz-gross { display: flex; gap: var(--a-m); justify-content: center; align-items: center; }
-.muenz-gross .muenze, .muenz-gross .wuerfel { width: max(6.5rem, calc(140 * var(--s))); height: max(6.5rem, calc(140 * var(--s))); }
-.muenz-gross .muenze--klein { width: max(4.5rem, calc(96 * var(--s))); height: max(4.5rem, calc(96 * var(--s))); }
-.buehne .muenze-seiten { background: rgba(255, 255, 255, 0.12); border-radius: var(--r-papier); padding: var(--a-s); }
-.muenze-seiten--gross .muenze--klein { width: 5rem; height: 5rem; }
-.skala--drei { grid-template-columns: 1fr; }
-.skala-knopf--gleich { --fuell: 50%; }
-.muenz-reihe { display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap; align-items: center; }
-.muenz-reihe .muenze { width: 3.25rem; height: 3.25rem; }
-.muenz-reihe__platz--frage { width: 3.25rem; height: 3.25rem; border: 2px dashed rgba(255, 255, 255, 0.75); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--weiss); font-weight: 700; font-size: var(--gr-text); }
-.muenz-paar { display: flex; gap: var(--a-m); justify-content: center; align-items: center; }
-.muenz-paar .muenze--klein { width: 4rem; height: 4rem; }
-.wurf-feld { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; background: var(--papier); border-radius: 0.6rem; padding: var(--a-s); width: 100%; max-width: 24rem; }
-.wurf-feld__wurf { text-align: center; font-weight: 700; font-size: var(--gr-klein); color: var(--navy); border: 2px solid transparent; border-radius: 0.3rem; line-height: 1.6; }
-.wurf-feld__wurf--zahl { color: var(--tinte-leise); }
-.wurf-feld__wurf.ist-reihe { border-color: var(--welle); }
-.wurf-feld__wurf.ist-danach { background: var(--navy); color: var(--weiss); }
-.serien-tabelle tr.ist-genau { font-weight: 700; }
-.versuch-text { font-weight: 700; margin: var(--a-m) 0 var(--a-xs); }
-.muenz-gitter__knopf { min-height: max(56px, 4rem); }
-.muenz-gitter__knopf > span { display: inline-flex; align-items: center; gap: 0.3rem; }
-.muenz-gitter__knopf .muenze { width: 2.4rem; height: 2.4rem; }
-.muenz-gitter__knopf .muenze:first-child { width: 1.6rem; height: 1.6rem; }
-.muenz-gitter th { white-space: nowrap; font-size: var(--gr-klein); }
-.strichliste__muenze .muenze { width: 1.75rem; height: 1.75rem; }
 
 /* ---------- Station „Kann das stimmen?“ ---------- */
 .vorher { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.12); border-radius: var(--r-papier); padding: var(--a-xs) var(--a-s); }
-.vorher__text { color: var(--weiss); font-weight: 700; margin-right: 0.3rem; }
-.vorher .kugel-symbol { width: 1.6rem; height: 1.6rem; }
-.vorher .wuerfel { width: 1.9rem; height: 1.9rem; }
+
 .tipp--schluss { margin-top: var(--a-m); padding: var(--a-s) var(--a-m); background: rgba(11, 49, 85, 0.06); border-radius: 0.8rem; }
 .tipp--schluss .nuri-klein { width: 3rem; height: 3rem; flex: none; }
 .tipp--schluss p { margin: 0; font-weight: 700; }
-/* Lange Strichlisten (100 Züge) brechen in Fünfergruppen um, statt über den Rand zu laufen */
-.strichliste li { min-width: 0; }
-.strichliste .striche { display: inline-flex; flex-wrap: wrap; row-gap: 0.2rem; min-width: 0; }
+
 
 /* ---------- Logbuch (js/logbuch.js) ---------- */
 .logbuch { max-width: 52rem; margin-left: auto; margin-right: auto; }
@@ -278,25 +122,13 @@
 .logbuch-knopf__zahl { font-weight: 400; font-size: var(--gr-klein); opacity: 0.9; }
 
 /* ---------- Etappe 6b: Befunde aus dem Design-Review ---------- */
-/* A1, A10: 6 × 6-Gitter passt auf jede Breite, etwas mehr Luft, ruhigere Umrandung.
-   Die Knöpfe zeigen „1 + 4“ selbst; die Kopfzeile und -spalte sind am Handy nur noch für Screenreader da. */
-.wurf-gitter { border-spacing: 0.35rem; max-width: 100%; }
-.wurf-gitter:not(.muenz-gitter) .gitter-knopf { min-width: 0; width: clamp(var(--tippen), 11vw, 4.5rem); padding: 0 0.15rem; border-width: 1.5px; border-color: rgba(11, 49, 85, 0.45); }
-.gitter-knopf[aria-pressed="true"] { border-color: var(--navy); }
-@media (max-width: 520px) {
-  .station-flaeche .aufgabe.papier { padding: var(--a-m) var(--a-s); }
-  .wurf-gitter:not(.muenz-gitter) { border-spacing: 0.2rem; }
-  .wurf-gitter:not(.muenz-gitter) thead, .wurf-gitter:not(.muenz-gitter) tbody th { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .wurf-gitter:not(.muenz-gitter) .gitter-knopf { width: var(--tippen); font-size: 0.95rem; }
-}
+
+
 /* A8: „Lösung gezeigt“ ist ein eigener, ruhiger Zustand (Umriss gestrichelt, ohne Haken), nicht wie „richtig gelöst“ */
 .loesung-gezeigt .knopf.ist-richtig, .loesung-gezeigt .knopf.ist-richtig[disabled] { background: var(--weiss); color: var(--navy); border: 2px dashed var(--navy); opacity: 1; }
 .loesung-gezeigt .ist-richtig::after { content: none; }
-/* A9: Bei großer Schrift (200 %) und schmalen Fenstern umbrechen statt abschneiden */
-.wuerfel-reihe, .muenz-paar, .muenz-gross, .muenz-reihe, .logbuch__stempel { flex-wrap: wrap; }
-.kisten-reihe--klein { grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.5rem), 1fr)); }
-.muenz-gitter th { white-space: normal; }
-.muenz-gitter, .wurf-gitter { table-layout: auto; }
+.logbuch__stempel { flex-wrap: wrap; }
+
 .logbuch__zeile > * { min-width: 0; }
 /* A12: Stationstitel genau in der Mitte (Pfeil links und Werkzeuge rechts nehmen gleich viel Platz).
    Nur, wenn Titel und beide Werkzeuge wirklich nebeneinander passen: Container-Abfrage in rem, wächst also mit der
@@ -309,19 +141,6 @@
 }
 .logbuch__offen { font-size: 0.95rem; }
 .logbuch__stufe { width: 5rem; }
-/* A6: Hochformat (und schmale Fenster): Während einer Versuchsreihe bleibt die Bühne oben stehen und wird kleiner,
-   damit Kiste, Rad, Würfel oder Münze neben Strichliste und Diagramm im Blick bleiben. */
-@media (orientation: portrait), (max-width: 819px) {
-  .flaeche--versuch > .buehne {
-    position: sticky; top: 0; z-index: 3; gap: var(--a-s); padding: var(--a-s) var(--a-m);
-    background: rgba(10, 52, 84, 0.93);
-  }
-  .flaeche--versuch .rad { max-width: min(24rem, 28svh); }
-  .flaeche--versuch .kiste { max-width: min(30rem, 42svh); }
-  .flaeche--versuch .wuerfel-reihe .wuerfel { width: 4.5rem; height: 4.5rem; }
-  .flaeche--versuch .muenz-gross .muenze { width: 5rem; height: 5rem; }
-  .flaeche--versuch .rad-ergebnis { font-size: var(--gr-label); }
-}
 /* B13: Rundenende als Höhepunkt: Glasfeld, großer Stempel auf Papier, Nuri daneben, ein Hauptknopf, die anderen kleiner */
 .rundenende {
   max-width: 34rem; margin: var(--a-l) auto; padding: var(--a-l) var(--a-l) var(--a-m); text-align: center; color: var(--weiss);
@@ -342,39 +161,11 @@
 .knopf--klein { font-size: var(--gr-klein); font-weight: 400; padding: 0 var(--a-m); }
 .rundenende .knopf--klein { background: transparent; color: var(--weiss); border-color: rgba(255, 255, 255, 0.6); }
 
-/* B15: Legende über dem Wurf- und Zugfeld */
-.wurf-legende { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; justify-content: center; margin: 0 0 0.4rem; font-size: var(--gr-klein); color: var(--navy); background: var(--papier); border-radius: 0.6rem; padding: 0.35rem 0.7rem; max-width: 24rem; }
-.wurf-legende__teil { display: inline-flex; align-items: center; gap: 0.4rem; }
-.wurf-legende .wurf-feld__wurf { display: inline-block; width: 1.4em; }
 
-/* 6b: Skala-Knöpfe am Handy etwas weniger Innenabstand, damit „unwahrscheinlich“ ganz hineinpasst */
-@media (max-width: 420px) { .skala-knopf { padding-inline: 0.55rem; gap: 0.35rem; } }
-/* 6b: Skala zweispaltig nur, wenn „unwahrscheinlich“ in eine halbe Zeile passt (etwa 9,5 Schriftbreiten); sonst eine Spalte.
-   Wächst mit der Schriftgröße mit, also auch bei 200 % Text. Silbentrennung per CSS kann Chrome unter Windows nicht. */
-.skala:not(.skala--drei) { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(9.5em, calc((100% - var(--a-s)) / 2))), 1fr)); }   /* höchstens zwei Spalten */
 
 /* ---------- Etappe 6c (Finish-Review) ---------- */
 .zusammen { white-space: nowrap; }
-/* Tabelle auf der Bühne: runde Ecken ohne dunkle Zwickel */
-.buehne .wege-tabelle { border-collapse: separate; border-spacing: 0; overflow: hidden; }
-.buehne .wege-tabelle th, .buehne .wege-tabelle td { border-width: 0 0 1px 1px; }
-.buehne .wege-tabelle tr > :first-child { border-left-width: 0; }
-.buehne .wege-tabelle tbody tr:last-child > * { border-bottom-width: 0; }
 
-/* „Kann das stimmen?“: Ergebnis des Ausprobierens als helle Karte auf der Bühne.
-   Breite Bühne: Material links, Karte rechts. Schmale Bühne: untereinander, Material kleiner. */
-.buehne { container: buehne / inline-size; }
-.versuch-karte { width: 100%; background: var(--papier); color: var(--navy); border-radius: var(--r-papier); padding: var(--a-s) var(--a-m); }
-.versuch-karte .diagramm .saeulen { max-width: 17rem; }
-.versuch-karte .diagramm--breit .saeulen { max-width: 26rem; }
-.buehne--versuch .rad { max-width: min(16rem, 100%); }
-.buehne--versuch .kiste { max-width: min(18rem, 100%); }
-/* Nebeneinander, sobald die Bühne breit genug ist; das breite Diagramm (11 Augensummen) bleibt darunter */
-@container buehne (min-width: 28rem) {
-  .buehne--versuch:not(:has(.diagramm--breit)) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
-  .buehne--versuch:not(:has(.diagramm--breit)) > * { grid-column: 1; }
-  .buehne--versuch:not(:has(.diagramm--breit)) > .versuch-karte { grid-column: 2; grid-row: 1 / span 6; }
-}
 
 
 /* ---------- Zeitenstrom: Zeit-Symbol, Sätze, Kacheln, Lücken, Tabellen ---------- */
@@ -435,3 +226,37 @@
 .formen-tabelle td .luecke { min-width: 6rem; }
 .stufe-knopf__was { display: block; font-weight: 400; font-size: var(--gr-klein); }
 .loesung-gezeigt .rueckmeldung { font-weight: 400; }
+
+
+/* ---------- Design-Review 16.11.2026 (Impeccable) ---------- */
+.satz--gross, .kachel { font-size: clamp(1.375rem, 1rem + 1.2vw, 2.25rem); }
+/* Fachwort nach der Antwort: ruhige Fläche statt Randstreifen */
+.fachwort { border-left: 0; border-radius: var(--r-knopf); background: rgba(45, 111, 152, 0.12); font-size: var(--gr-text); }
+.fachwort .zeit-symbol { width: 3.2rem; height: 1.5rem; }
+.vorlage .zeit-symbol { width: 3rem; height: 1.4rem; }
+/* Zeitfehler: die Geschichte liest sich als Text, die Wörter sind trotzdem antippbar (ganze Zeilenhöhe) */
+.geschichte .wort-knopf { background: transparent; border-color: transparent; padding: 0.1rem 0.12rem; min-width: 0; }
+.geschichte .wort-knopf:hover, .geschichte .wort-knopf:focus-visible { background: var(--weiss); border-color: var(--papier-linie); }
+/* Lücke, die beim Prüfen nicht passte: dicker gestrichelter Rahmen und Schraffur (nicht nur Farbe) */
+.luecke--falsch { border-width: 3px; border-style: dashed; border-color: #a24a33;
+  background: repeating-linear-gradient(45deg, rgba(162, 74, 51, 0.14) 0 6px, transparent 6px 12px), var(--weiss); }
+/* Gezeichnete Zeichen für „Das stimmt.“ / „Das stimmt nicht.“ */
+.antwort-zeichen { width: 1.6rem; height: 1.6rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+.begr-knopf .zeit-symbol { width: 2.8rem; }
+/* Stufen-Zeichen: eine bis drei Wellen */
+.stufe-knopf__name { display: inline-flex; align-items: center; gap: 0.5rem; }
+.stufe-zeichen { width: 2rem; height: 1.6rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; }
+.stufe-zeichen .welle-leer { opacity: 0.25; }
+/* Nuri beim Rundenende groß */
+.rundenende__satz .nuri-gross { width: clamp(5rem, 12vw, 8rem); height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; flex: none; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7); }
+/* Logbuch: erreichte Stempel deutlich (Navy-Scheibe, Motiv hell) */
+.logbuch__stufe--voll .stempel-bild { background: var(--navy); border-radius: 50%; }
+.logbuch__stufe--voll .stempel__welle { stroke: var(--weiss); }
+.logbuch__stufe--voll .stempel__kugel { fill: var(--weiss); }
+.logbuch__stufe--voll .stempel__rand { stroke: rgba(255, 255, 255, 0.75); }
+.logbuch__offen { font-size: var(--gr-klein); }
+/* Wörter-Dialog: auf schmalen Bildschirmen untereinander statt gequetschter Spalten */
+@media (max-width: 44rem) {
+  .wortspeicher__tabelle, .wortspeicher__tabelle tbody, .wortspeicher__tabelle tr, .wortspeicher__tabelle th, .wortspeicher__tabelle td { display: block; }
+  .wortspeicher__tabelle th { white-space: normal; border-bottom: 0; padding-bottom: 0; }
+}

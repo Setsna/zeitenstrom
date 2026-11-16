@@ -49,6 +49,11 @@
       </details>`;
   }
 
+  /* Stufen-Zeichen: eine, zwei oder drei Wellen (ohne Lesen unterscheidbar) */
+  function stufenZeichen(st) {
+    const n = { leicht: 1, mittel: 2, knifflig: 3 }[st] || 1;
+    return `<svg class="stufe-zeichen" viewBox="0 0 30 24" aria-hidden="true" focusable="false">${[0, 1, 2].map(i => `<path class="${i < n ? 'welle-voll' : 'welle-leer'}" d="M3 ${6 + i * 6}c4-3 8-3 12 0s8 3 12 0"/>`).join('')}</svg>`;
+  }
   /* Stufenwahl: Empfehlung = erste Stufe ohne Stempel */
   const empfohlen = id => C().stufen.find(st => !ST().hatStempel(id, st)) || 'knifflig';
   const erstesMal = id => C().stufen.every(st => !ST().runden(id, st));
@@ -60,7 +65,7 @@
         <ul class="stufen-liste">
           ${C().stufen.map(st => `
             <li><button type="button" class="knopf stufe-knopf${st === emp ? ' stufe-knopf--empfohlen' : ''}" data-${praefix}="stufe" data-stufe="${st}">
-              <span class="stufe-knopf__name">${ctx.esc(STUFENNAME[st])}</span>
+              <span class="stufe-knopf__name">${stufenZeichen(st)}${ctx.esc(STUFENNAME[st])}</span>
               ${beschreibung[st] ? `<span class="stufe-knopf__was">${ctx.esc(beschreibung[st])}</span>` : ''}
               <span class="stufe-knopf__info">${ST().hatStempel(id, st) ? '<span class="stempel-punkt stempel-punkt--voll" aria-hidden="true"></span> Stempel geschafft' : '<span class="stempel-punkt" aria-hidden="true"></span> Noch kein Stempel'}${st === emp ? ' · empfohlen' : ''}</span>
             </button></li>`).join('')}
@@ -88,7 +93,7 @@
       <section class="rundenende${geschafft >= ab ? ' rundenende--geschafft' : ''}" aria-labelledby="h-ende">
         <h2 id="h-ende" class="nurvorlesen">Rundenende</h2>
         <div class="stempel-gross${geschafft >= ab || hatteSchon ? ' stempel-gross--voll' : ''}${neu ? ' stempel-gross--neu' : ''}" aria-hidden="true">${stempelSvg}</div>
-        <div class="rundenende__satz">${ctx.nuriKlein}<p class="rundenende__text">${ctx.esc(text)}</p></div>
+        <div class="rundenende__satz">${ctx.nuriGross || ctx.nuriKlein}<p class="rundenende__text">${ctx.esc(text)}</p></div>
         <p class="knopfreihe knopfreihe--mitte">
           <button type="button" class="knopf haupt rundenende__haupt" data-${praefix}="stufe" data-stufe="${haupt.stufe}">${ctx.esc(haupt.text)}</button>
         </p>

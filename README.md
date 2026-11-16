@@ -1,10 +1,10 @@
 # Zeitenstrom
 
-Lernplattform zu den **Zeitformen der Verben** für die Klasse 3 (8 bis 9 Jahre): Präsens, Präteritum und Perfekt. Das Futur folgt als Zusatz für Klasse 4.
+Lernplattform zu den **Zeitformen der Verben** für die Klasse 3 (8 bis 9 Jahre): Präsens, Präteritum und Perfekt, dazu das Futur als Zusatz für Klasse 4.
 Die Kinder finden das Verb, setzen Formen aus Kacheln zusammen, schreiben Geschichten Satz für Satz in die Vergangenheit um und finden Zeitfehler.
 Begleiter ist Nuri, ein Nautilus. Es gibt keine Punkte, keinen Zeitdruck und keine Ranglisten.
 
-**Adresse:** https://setsna.github.io/zeitenstrom/ (noch nicht veröffentlicht)
+**Adresse:** https://setsna.github.io/zeitenstrom/
 
 Schwesterseite der [Lernlagune](https://lernlagune.de).
 
@@ -20,6 +20,7 @@ Jede Station hat drei Stufen (leicht, mittel, knifflig). Eine Runde hat sechs Au
 | Geschichte umschreiben | Geschichte Satz für Satz ins Präteritum, knifflig ins Perfekt |
 | Zeitfehler finden | in einer Geschichte von gestern das Verb für jetzt finden und verbessern |
 | Kann das stimmen? | Nuri behauptet etwas über Verben, das Kind prüft es und begründet |
+| Futur (Zusatz Klasse 4) | werden und Grundform einsetzen, alle vier Zeitformen erkennen, Satz im Futur bauen; zählt nicht für die Urkunde |
 
 Dazu ein Logbuch mit allen Stempeln und „Das kann ich schon“ und eine Urkunde als PDF, die auf dem Gerät entsteht.
 

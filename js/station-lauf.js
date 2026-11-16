@@ -18,6 +18,10 @@
   const V = () => ZE.verben;
   const K = () => ZE.kacheln;
 
+  /* Gezeichnete Zeichen für „Das stimmt.“ und „Das stimmt nicht.“ (keine Schriftzeichen) */
+  const HAKEN = '<svg class="antwort-zeichen" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const KREUZ = '<svg class="antwort-zeichen" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>';
+
   function eintragen(def) {
     const P = def.praefix;
     let ctx = null, z = null, hilfeStufe = 0, steuer = null;
@@ -58,6 +62,8 @@
       if (erster && z.i > 0) erster.focus({ preventScroll: true });
     }
 
+  /* Was gesucht ist, steht als Wort neben dem Zeichen (nicht nur über die Zahl der Lücken erkennbar) */
+    const ZIEL_WORT = { praeteritum: 'früher, ein Wort', perfekt: 'früher, mit haben oder sein', futur: 'später, mit werden' };
     const weiterKnopf = () => `<p class="knopfreihe"><button type="button" class="knopf haupt" data-${P}="weiter">${z.i + 1 < z.aufgaben.length ? 'Weiter' : 'Zum Rundenende'}</button></p>`;
     const rueckHtml = (s, id = 'rueck') => `<p class="rueckmeldung" id="${P}-${id}" role="status">${s.rueck ? esc(s.rueck) : ''}</p>`;
 
@@ -95,6 +101,8 @@
       steuer = K().steuerung(ort, { kacheln, ansagen: ctx.ansagen, beiAenderung: () => { const b = ziel.querySelector(`[data-${P}="pruefen"]`); if (b) b.disabled = !steuer.voll(); } });
       /* Richtige Kacheln aus dem ersten Versuch bleiben stehen */
       if (s.behalten) for (const [i, id] of Object.entries(s.behalten)) steuer.setze(id, Number(i));
+      /* Nach einem Fehlversuch: die Lücken, die nicht passten, sichtbar markieren (Rahmen und Zeichen, nicht nur Farbe) */
+      for (const i of s.falsch || []) { const l = ort.querySelector(`.luecke[data-luecke="${i}"]`); if (l) l.classList.add('luecke--falsch'); }
       const b = ziel.querySelector(`[data-${P}="pruefen"]`);
       if (b) b.disabled = !steuer.voll();
     }
@@ -134,7 +142,7 @@
         koerper = `
           ${a.vorlage ? `<p class="vorlage">${T().zeitSymbol('praesens')}<span class="vorlage__wort">jetzt:</span> <span class="satz">${esc(a.vorlage.satz)}</span></p>` : ''}
           ${a.geschichte ? `<p class="leise">${esc(a.geschichte)} · Satz ${a.nummer} von 6</p>` : ''}
-          <p class="vorlage vorlage--ziel">${T().zeitSymbol(a.zeit)}<span class="vorlage__wort">${a.zeit === 'futur' ? 'später:' : 'früher:'}</span>
+          <p class="vorlage vorlage--ziel">${T().zeitSymbol(a.zeit)}<span class="vorlage__wort">${esc(ZIEL_WORT[a.zeit] || 'früher')}:</span>
             <span class="satz satz--gross">${s.fertig ? satzHtml(fertigerSatz(a, s), { verbHervor: true }) : `<span class="nurvorlesen">${esc(l.text)}</span><span aria-hidden="false">${l.html}</span>`}</span></p>`;
       }
       return `
@@ -189,8 +197,8 @@
         <h2 class="frage-klein" id="${P}-frage">${s.fertig ? 'Geschafft' : s.phase === 'suchen' ? `Die Geschichte erzählt von früher. Ein Verb passt nicht${a.fehler.length > 1 ? ` (es sind ${a.fehler.length})` : ''}. Tippe es an.` : 'Gefunden.'}</h2>
         <p class="leise">${esc(a.geschichte)}${!s.fertig && a.fehler.length > 1 ? ` · noch ${offen} zu finden` : ''}</p>
         <div class="geschichte">${saetze.map(x => `<p class="satz">${x}</p>`).join('')}</div>
-        ${korr}
         ${rueckHtml(s)}
+        ${korr}
         ${s.fertig ? `<p class="fachwort">${T().zeitSymbol('praeteritum')}<span>Jetzt steht die ganze Geschichte im <b>Präteritum</b>.</span></p>${weiterKnopf()}` : ''}`;
     }
 
@@ -200,13 +208,13 @@
         <div class="nuri-aussage">${ctx.nuriKlein}<div><p class="nurvorlesen">Nuri sagt:</p><p class="aussage" id="${P}-frage">${esc(a.behauptung)}</p></div></div>
         <h2 class="frage-klein">Kann das stimmen?</h2>
         <div class="antworten antworten--zwei" role="group" aria-label="Antworten">
-          ${[['ja', 'Das stimmt.'], ['nein', 'Das stimmt nicht.']].map(([id, t]) => `<button type="button" class="knopf antwort-knopf${s.phase !== 'antwort' && (id === 'ja') === a.stimmt ? ' ist-richtig' : ''}" data-${P}="antwort" data-id="${id}"${s.phase !== 'antwort' ? ' disabled' : ''}>${esc(t)}</button>`).join('')}
+          ${[['ja', 'Das stimmt.'], ['nein', 'Das stimmt nicht.']].map(([id, t]) => `<button type="button" class="knopf antwort-knopf antwort-knopf--zeichen${s.phase !== 'antwort' && (id === 'ja') === a.stimmt ? ' ist-richtig' : ''}" data-${P}="antwort" data-id="${id}"${s.phase !== 'antwort' ? ' disabled' : ''}>${id === 'ja' ? HAKEN : KREUZ}<span>${esc(t)}</span></button>`).join('')}
         </div>
         ${rueckHtml(s)}
         ${s.phase === 'begr' || s.phase === 'ende' ? `
           <h2 class="frage-klein">Warum? Tippe den passenden Satz an.</h2>
           <div class="begruendungen" role="group" aria-label="Begründungen">
-            ${a.begruendungen.map((b, i) => `<button type="button" class="knopf begr-knopf${s.phase === 'ende' && b.richtig ? ' ist-richtig' : ''}" data-${P}="begr" data-i="${i}"${s.phase !== 'begr' ? ' disabled' : ''}>${esc(b.text)}</button>`).join('')}
+            ${a.begruendungen.map((b, i) => `<button type="button" class="knopf begr-knopf${s.phase === 'ende' && b.richtig ? ' ist-richtig' : ''}" data-${P}="begr" data-i="${i}"${s.phase !== 'begr' ? ' disabled' : ''}>${b.zeit ? T().zeitSymbol(b.zeit) : ''}<span>${esc(b.text)}</span></button>`).join('')}
           </div>` : ''}
         ${s.begrRueck ? `<p class="rueckmeldung" role="status">${esc(s.begrRueck)}</p>` : ''}
         ${s.fertig ? `<div class="tipp tipp--schluss">${ctx.nuriKlein}<p>${esc(a.schluss)}</p></div>${weiterKnopf()}` : ''}`;
@@ -301,6 +309,7 @@
       s.behalten = {};
       const belegung = steuer.belegung();
       ergebnis.forEach((ok, i) => { if (ok) s.behalten[i] = belegung[i]; });
+      s.falsch = ergebnis.map((ok, i) => (ok ? -1 : i)).filter(i => i >= 0);
       const falschI = ergebnis.findIndex(x => !x);
       s.rueck = tippZurForm(a, steuer.text(falschI), falschI);
       nachher(`.kachel:not([disabled])`, s.rueck);
@@ -308,7 +317,7 @@
     function tippZurForm(a, gewaehlt, i) {
       const v = V().gib(a.verb), p = a.person;
       const g = (gewaehlt || '').toLowerCase();
-      if (a.typ === 'tabelle') return 'Noch nicht ganz. Schau, welche Person in der Zeile steht: ich, du, er/sie/es, wir, ihr oder sie.';
+      if (a.typ === 'tabelle') { const z = a.zeilen.find(x => x.luecke === i); return `Bei „${z ? z.person : ''}“ passt die Form noch nicht. Die markierte Lücke ist wieder frei.`; }
       if (a.bauen) return 'Noch nicht ganz. Schau, wer es tut. Die Endung passt zur Person.';
       if (a.satzBau) {
         const teil = a.verbStellen.indexOf(i);

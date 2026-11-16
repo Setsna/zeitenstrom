@@ -26,6 +26,7 @@
         const feld = l.querySelector('.luecke__feld');
         feld.textContent = k ? k.text : '';
         l.classList.toggle('luecke--voll', !!k);
+        if (k) l.classList.remove('luecke--falsch');
         l.classList.toggle('luecke--aktiv', !gesperrt && !k && i === aktiv);
         l.setAttribute('aria-label', `Lücke ${i + 1}: ${k ? (l.dataset.praefix || '') + k.text : 'leer'}`);
         l.disabled = gesperrt;

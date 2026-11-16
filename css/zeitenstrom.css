@@ -74,7 +74,6 @@ body {
   85% { opacity: 0.7; }
   100% { transform: translate3d(-6px, -100vh, 0); opacity: 0; }
 }
-.ruht .licht, .ruht .blasen span { animation-play-state: paused; }
 
 /* ---------- Seite ---------- */
 .seite { max-width: 80rem; margin: 0 auto; padding: calc(96 * var(--s)) var(--a-m) var(--a-l); outline: none; }
@@ -166,7 +165,7 @@ a.knopf { display: inline-flex; align-items: center; text-decoration: none; }
 }
 /* Querformat: alle fünf nebeneinander, ohne Scrollen (Lernlagune: Querformat-ohne-Scrollen) */
 @media (orientation: landscape) and (min-width: 820px) {
-  .stationen { --spalten: 5; max-width: 80rem; }
+  .stationen { --spalten: 6; max-width: 84rem; }
 }
 .stationen > li { display: flex; flex: 0 1 calc((100% - (var(--spalten) - 1) * var(--luecke)) / var(--spalten) - 1px); min-width: 0; }
 @media (max-width: 560px) {
@@ -191,7 +190,7 @@ a.knopf { display: inline-flex; align-items: center; text-decoration: none; }
 .station__name { display: block; margin: 0; font-family: var(--schrift-name); font-weight: 400; font-size: max(1.375rem, calc(40 * var(--s)));
   font-size: clamp(min(1.25rem, 17cqi), 17cqi, 2.5rem);   /* richtet sich nach der Kartenbreite (Container), ältere Browser nehmen die Zeile davor */
   max-width: 100%; hyphens: auto; overflow-wrap: anywhere; line-height: 1.3; text-shadow: 0 1px 3px rgba(4, 30, 50, 0.55); }
-.station__kurz { display: block; font-size: var(--gr-klein); line-height: 1.3; }
+.station__kurz { display: block; font-size: var(--gr-klein); line-height: 1.3; text-shadow: 0 1px 3px rgba(4, 30, 50, 0.65); }
 /* Live-Station: ganzes Fenster ist der Knopf. Getöntes Glas (0.62 oben), damit kleine weiße Schrift AA erreicht. */
 .station--live {
   cursor: pointer;
@@ -207,23 +206,9 @@ a.knopf { display: inline-flex; align-items: center; text-decoration: none; }
 .station__linie { width: 60%; height: 1px; margin: calc(14 * var(--s)) auto; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent); position: relative; }
 .station__linie::after { content: ''; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--weiss); box-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
 .station p { margin: 0; font-size: var(--gr-klein); line-height: 1.3; text-shadow: 0 1px 3px rgba(4, 30, 50, 0.55); }
-.station__bild { width: calc(120 * var(--s)); min-width: 4.5rem; height: auto; margin: auto 0 calc(10 * var(--s)); padding-top: calc(18 * var(--s)); }
 .station__bald { margin-top: var(--a-s) !important; font-size: var(--gr-label); opacity: 0.92; display: inline-flex; align-items: center; gap: 0.4em; }
 .schloss { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Stationsbilder (Code-Grafik, nur Zierde): Inhaltsfarben gedämpft, mit Muster */
-.sym { fill: none; stroke: rgba(255, 255, 255, 0.92); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.sym .sym-strom { stroke: rgba(205, 236, 245, 0.95); stroke-width: 2.6; }
-.sym .sym-strom--pfeil { stroke-width: 2.6; }
-.sym .sym-punkt { fill: var(--weiss); stroke: none; }
-.sym .sym-punkt--hohl { fill: none; stroke: var(--weiss); stroke-width: 2; }
-.sym .sym-kachel { fill: var(--papier); stroke: rgba(255, 255, 255, 0.95); stroke-width: 1.4; }
-.sym .sym-text { fill: var(--navy); stroke: none; font-family: var(--schrift-text); font-size: 11px; font-weight: 700; text-anchor: middle; }
-.sym .sym-zeile { stroke: rgba(255, 255, 255, 0.85); stroke-width: 2.4; }
-.sym .sym-plus { stroke: var(--weiss); stroke-width: 2.2; }
-.sym .sym-lupe { stroke: var(--weiss); stroke-width: 3; fill: rgba(200, 236, 255, 0.18); }
-.sym .sym-lupe--griff { stroke-width: 5; }
-.sym .sym-frage { stroke: rgba(255, 255, 255, 0.95); stroke-width: 3; }
 
 /* ---------- Erwachsenenbereich ---------- */
 .erwachsene summary { cursor: pointer; min-height: var(--tippen); display: flex; align-items: center; list-style-position: inside; }
@@ -261,43 +246,7 @@ a.knopf { display: inline-flex; align-items: center; text-decoration: none; }
   .blasen { display: none; }
 }
 
-/* ---------- Fühlkiste (js/kiste.js): Holz, gedämpft ---------- */
-.kiste { display: block; width: 100%; max-width: 30rem; height: auto; margin: 0 auto; }
-.kiste__rueck { fill: #7a5536; stroke: #5c3e26; stroke-width: 2; }
-.kiste__innen { fill: #3f2a1a; }
-.kiste__kante { stroke: #a77b52; stroke-width: 10; stroke-linecap: round; }
-.kiste__deckel { fill: #8a6140; stroke: #5c3e26; stroke-width: 2; }
-.kiste__loch { fill: #24170e; }
-.kiste__tuch { fill: none; stroke: #c9b79a; stroke-width: 3; stroke-linecap: round; }
-.kugel__grund.k-blau { fill: var(--kugel-blau); }
-.kugel__grund.k-rot { fill: var(--kugel-rot); }
-.kugel__grund.k-gelb { fill: var(--kugel-gelb); }
-.kugel__grund.k-gruen { fill: var(--kugel-gruen); }
-.kugel__muster.m-streifen { fill: url(#m-streifen); }
-.kugel__muster.m-punkte { fill: url(#m-punkte); }
-.kugel__muster.m-karo { fill: url(#m-karo); }
-.kugel__glanz { fill: rgba(255, 255, 255, 0.35); }
-.kugel__rand { fill: none; stroke: rgba(20, 12, 6, 0.55); stroke-width: 1.5; }
-.kugel__zahl { font: 700 16px var(--schrift-text); text-anchor: middle; fill: #fff; stroke: rgba(10, 30, 45, 0.85); stroke-width: 3; paint-order: stroke; }
-.kugel--blass { opacity: 0.28; transition: opacity var(--dauer) var(--kurve); }
-.kugel--leer { fill: rgba(255, 255, 255, 0.06); stroke: rgba(255, 255, 255, 0.55); stroke-width: 2; stroke-dasharray: 5 5; }
 
-/* ---------- Säulendiagramm (js/saeulen.js) ---------- */
-.saeulen { display: block; width: 100%; max-width: 32rem; height: auto; margin: 0 auto; }
-.saeulen__achse { stroke: var(--navy); stroke-width: 2; }
-.saeulen__gitter { stroke: rgba(11, 49, 85, 0.18); stroke-width: 1; }
-.saeulen__tick, .saeulen__name, .saeulen__wert { font-family: var(--schrift-text); font-weight: 400; fill: var(--navy); }   /* Größe setzt js/saeulen.js */
-.saeulen__tick { text-anchor: end; }
-.saeulen__name, .saeulen__wert { text-anchor: middle; }
-.saeulen__wert { font-weight: 700; }
-.saeulen__balken.k-blau { fill: var(--kugel-blau); } .saeulen__balken.k-rot { fill: var(--kugel-rot); }
-.saeulen__balken.k-gelb { fill: var(--kugel-gelb); } .saeulen__balken.k-gruen { fill: var(--kugel-gruen); }
-.saeulen__balken.k-neutral { fill: var(--welle); }
-.saeulen__muster.m-streifen { fill: url(#m-streifen); } .saeulen__muster.m-punkte { fill: url(#m-punkte); } .saeulen__muster.m-karo { fill: url(#m-karo); }
-.saeulen__schatten { fill: rgba(11, 49, 85, 0.16); stroke: rgba(11, 49, 85, 0.45); stroke-width: 1.5; stroke-dasharray: 4 3; }
-.haeufigkeiten { border-collapse: collapse; margin: var(--a-s) auto 0; font-size: var(--gr-klein); }
-.haeufigkeiten caption { font-weight: 700; padding-bottom: var(--a-xs); }
-.haeufigkeiten th, .haeufigkeiten td { border: 1px solid var(--papier-linie); padding: 0.25rem 0.75rem; text-align: center; }
 
 /* Erwachsenenbereich: Liste der Stationen, Tabelle Prinzip und Umsetzung */
 .erwachsene__liste { padding-left: 1.2em; }
@@ -330,7 +279,7 @@ details > summary::after {
 }
 details[open] > summary::after { transform: translateY(25%) rotate(-135deg); }
 .erwachsene summary, .so-gehts summary, .am-tisch summary { gap: var(--a-m); }
-.erwachsene h3 { font-family: var(--schrift-text); font-weight: 700; font-size: var(--gr-label); margin: var(--a-l) 0 var(--a-xs); }
+.erwachsene h3 { font-family: var(--schrift-text); font-weight: 700; font-size: var(--gr-text); margin: var(--a-l) 0 var(--a-xs); }
 /* A5: Tafel und Beamer (1920 × 1080) und große Bildschirme: alles eine Stufe größer, die Seite nutzt die Fläche.
    Grundschrift 125 %: Alle rem-Größen (Schrift, Seite, Bühne, Rad) wachsen mit. --s darf bis 1,3 px wachsen,
    bleibt aber an die Fensterhöhe gebunden (Ingos breiter, flacher Monitor). Der Layout-Test prüft 1920 × 1080 und 3280 × 1115. */
@@ -364,3 +313,20 @@ h1[tabindex="-1"]:focus-visible { outline-offset: 6px; }
 .erwachsene:not([open]) > summary h2 { font-family: var(--schrift-text); font-size: 1rem; font-weight: 700; color: inherit; }
 .erwachsene:not([open]) > summary::after { order: -1; margin-left: 0; transform: rotate(-45deg); }
 .erwachsene:not([open]) > summary:focus-visible { outline-color: var(--weiss); box-shadow: 0 0 0 2px var(--navy); border-radius: 999px; }
+
+
+/* ---------- Design-Review 16.11.2026 (Impeccable) ---------- */
+/* Startseite: Nuri begrüßt neben dem Namen */
+.begruessung { display: flex; align-items: center; justify-content: center; gap: var(--a-m); margin-top: var(--a-s); }
+.begruessung h1 { margin: 0; }
+.begruessung__satz { margin: var(--a-xs) 0 0; font-size: var(--gr-text); }
+.nuri.nuri--start { width: clamp(4.5rem, calc(120 * var(--s)), 7.5rem); margin: 0; flex: none; }
+/* Futur als eigener, kleinerer Abschnitt unter den Stationen für Klasse 3 */
+.zusatz { margin-top: calc(40 * var(--s)); text-align: center; }
+.zusatz__titel { margin: 0 0 var(--a-s); font-family: var(--schrift-text); font-size: var(--gr-label); font-weight: 700; color: var(--weiss); text-shadow: 0 1px 3px rgba(4, 30, 50, 0.65); }
+.stationen--zusatz { margin-top: 0; --spalten: 1; max-width: 16rem; }
+.station__name { hyphens: manual; }
+/* Stationsbild: gemaltes Motiv im Fenster, trägt die Wahl (Lernlagune: „Das Bild im Fenster trägt die Wahl“) */
+.station__foto { display: block; width: min(78%, 11rem); height: auto; aspect-ratio: 1; margin: auto 0 calc(10 * var(--s)); padding: 0;
+  object-fit: cover; border-radius: calc(36 * var(--s)); box-shadow: 0 10px 22px -10px rgba(3, 20, 35, 0.55), 0 0 0 2px rgba(255, 255, 255, 0.55); }
+.station picture { display: contents; }

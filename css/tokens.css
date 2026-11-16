@@ -37,13 +37,6 @@
   --glas-schatten: rgba(0, 0, 0, 0.36);
   --nebel: rgba(10, 52, 84, 0.7);
 
-  /* Inhaltsfarben für Kugeln und Felder: gedämpft, gut unterscheidbar, jede mit eigenem Muster
-     (blau Streifen, rot Punkte, gelb glatt, grün Karo). Nie nur über die Farbe unterscheiden. */
-  --kugel-blau: #2f5f8f;
-  --kugel-rot: #b4553b;
-  --kugel-gelb: #d1a23a;
-  --kugel-gruen: #3e8a72;
-  --muster-hell: rgba(255, 255, 255, 0.55);
 
   /* Schriften */
   --schrift-name: 'Libre Caslon Text', Georgia, 'Times New Roman', serif;

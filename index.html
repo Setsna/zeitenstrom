@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- CSP: nur eigene Dateien. Einzige Ausnahme für das gemeinsame Konto:
+       Skripte von www.gstatic.com (Firebase, unten mit Prüfsumme) und Verbindungen zu *.googleapis.com.
+       datenschutz.html und impressum.html haben diese Ausnahme nicht. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self' https://www.gstatic.com; font-src 'self'; connect-src 'self' https://*.googleapis.com; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0e2f45">
+  <title>Zeitenstrom</title>
+  <meta name="description" content="Verben und ihre Zeitform für Klasse 3: Präsens, Präteritum und Perfekt erkennen und bilden. Anmeldung mit dem Code der Klasse, ohne Werbung, ohne Rangliste.">
+  <link rel="icon" href="bilder/favicon-64.png?b=2">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="bilder/app-180.png?b=2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Zeitenstrom">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preload" href="schriften/andika-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="schriften/libre-caslon-text.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/tokens.css?v=12">
+  <link rel="stylesheet" href="css/zeitenstrom.css?v=12">
+  <link rel="stylesheet" href="css/station.css?v=12">
+  <script src="js/fehler.js?v=12"></script>
+  <script src="js/konto-abgleich.js?v=12"></script>
+  <script src="js/konto-speicher.js?v=12"></script>
+  <script src="js/konto-cloud.js?v=12"></script>
+  <!-- Firebase für das gemeinsame Konto, dieselbe Version und Prüfsumme wie im Perlentaucher und den anderen Plattformen.
+       defer: Sie laden nach den eigenen Skripten und halten die Seite nicht auf (js/konto-cloud.js wartet auf sie). -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" integrity="sha384-ZaR6mWzmJtrRibZ1Vm7SoHFr8OXjyAuGAXalGDKqbxFT18oi/z+oZLIRFkpeNor1" crossorigin="anonymous"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js" integrity="sha384-I1LYojsZ5RM1cOda44Z2h42Qa6YfsQ1XkXxREnhp4ueYBR/4d1pG1K+NZM537Vsj" crossorigin="anonymous"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js" integrity="sha384-Ke0FJhH7LyRqDxZ0wt+/OXV38yfQVu7g9VPEEGjYmB4RVOY/ta04uecRhsMwT7V3" crossorigin="anonymous"></script>
+</head>
+<body class="lagune">
+  <picture class="wasser" aria-hidden="true">
+    <source media="(orientation: landscape)" srcset="bilder/strom-quer.webp?b=2" type="image/webp">
+    <source media="(orientation: landscape)" srcset="bilder/strom-quer.jpg?b=2">
+    <source srcset="bilder/strom-hoch.webp?b=2" type="image/webp">
+    <img src="bilder/strom-hoch.jpg?b=2" alt="" width="1088" height="1444" decoding="async">
+  </picture>
+  <div class="licht" aria-hidden="true"></div>
+  <div class="blasen" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <p id="vorschau-hinweis" class="vorschau-hinweis" hidden></p>
+  <main id="app" class="seite" tabindex="-1">
+    <noscript><p>Diese Lernseite braucht JavaScript. Bitte schalte es im Browser ein.</p></noscript>
+  </main>
+  <div class="meldung-bereich"><p id="meldung" class="meldung" role="status"></p></div>
+  <div id="live" class="nurvorlesen" aria-live="polite" aria-atomic="true"></div>
+  <footer class="fuss"><a href="impressum.html">Impressum</a> <a href="datenschutz.html">Datenschutz</a></footer>
+  <!-- Eigene Skripte am Ende: Sie brauchen #app. Firebase (oben, defer) kommt danach, js/konto-cloud.js wartet darauf. -->
+  <script src="js/config.js?v=12"></script>
+  <script src="js/zufall.js?v=12"></script>
+  <script src="js/verben.js?v=12"></script>
+  <script src="js/saetze.js?v=12"></script>
+  <script src="js/aufgaben.js?v=12"></script>
+  <script src="js/erwachsene.js?v=12"></script>
+  <script src="js/ze-stand.js?v=12"></script>
+  <script src="js/station-teile.js?v=12"></script>
+  <script src="js/kacheln.js?v=12"></script>
+  <script src="js/station-lauf.js?v=12"></script>
+  <script src="js/stationen/erkennen.js?v=12"></script>
+  <script src="js/stationen/praeteritum.js?v=12"></script>
+  <script src="js/stationen/perfekt.js?v=12"></script>
+  <script src="js/stationen/umschreiben.js?v=12"></script>
+  <script src="js/stationen/zeitfehler.js?v=12"></script>
+  <script src="js/stationen/stimmt.js?v=12"></script>
+  <script src="js/stationen/futur.js?v=12"></script>
+  <script src="js/urkunde.js?v=12"></script>
+  <script src="js/logbuch.js?v=12"></script>
+  <script src="js/app.js?v=12"></script>
+</body>
+</html>

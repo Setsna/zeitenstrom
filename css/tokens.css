@@ -1,0 +1,77 @@
+/* Zeitenstrom: Schriften, Farben, Abstände, Schriftgrößen an einer Stelle.
+   Grundlage: Lernlagune DESIGN.md. Die Inhaltsfarben (Kugeln, Felder) kommen in Etappe 1c dazu. */
+
+@font-face {
+  font-family: 'Libre Caslon Text';
+  src: url('../schriften/libre-caslon-text.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Andika';
+  src: url('../schriften/andika-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Andika';
+  src: url('../schriften/andika-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Farben (Lernlagune) */
+  --tiefe: #0e2f45;
+  --navy: #0b3155;
+  --navy-weich: #133c5a;
+  --welle: #2d6f98;
+  --weiss: #ffffff;
+  --papier: #f5f3ec;
+  --papier-linie: #d9d3c2;
+  --tinte-leise: #4a6275;
+  --glas-kante: rgba(255, 255, 255, 0.5);
+  --glas-schatten: rgba(0, 0, 0, 0.36);
+  --nebel: rgba(10, 52, 84, 0.7);
+
+  /* Inhaltsfarben für Kugeln und Felder: gedämpft, gut unterscheidbar, jede mit eigenem Muster
+     (blau Streifen, rot Punkte, gelb glatt, grün Karo). Nie nur über die Farbe unterscheiden. */
+  --kugel-blau: #2f5f8f;
+  --kugel-rot: #b4553b;
+  --kugel-gelb: #d1a23a;
+  --kugel-gruen: #3e8a72;
+  --muster-hell: rgba(255, 255, 255, 0.55);
+
+  /* Schriften */
+  --schrift-name: 'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --schrift-text: 'Andika', 'Trebuchet MS', system-ui, sans-serif;
+
+  /* Schriftgrößen (rem mit Untergrenze, damit Lesetext nicht schrumpft) */
+  --gr-display: clamp(2.25rem, 1.6rem + 2.4vw, 3.75rem);
+  --gr-title: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
+  --gr-text: clamp(1.25rem, 1rem + 0.6vw, 1.625rem);
+  --gr-label: clamp(1rem, 0.9rem + 0.3vw, 1.125rem);
+  --gr-klein: clamp(1rem, 0.92rem + 0.25vw, 1.125rem);
+
+  /* Abstände */
+  --a-xs: 0.25rem;
+  --a-s: 0.5rem;
+  --a-m: 1rem;
+  --a-l: 1.5rem;
+  --a-xl: 2.5rem;
+  --zeile: 34em;
+
+  /* Rundungen */
+  --r-papier: 1.25rem;
+  --r-knopf: 1rem;
+
+  /* Bewegung: nur opacity und transform */
+  --kurve: cubic-bezier(0.16, 1, 0.3, 1);
+  --dauer: 220ms;
+
+  /* Touchziel */
+  --tippen: 48px;
+}

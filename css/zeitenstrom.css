@@ -1,0 +1,366 @@
+/* Zeitenstrom: Gestaltung nach Lernlagune DESIGN.md (Etappe 1c).
+   Grundregeln: Navy nur im Licht (heller Hof hinter dunkler Schrift), Glasrezept unverändert
+   (blur 6px, saturate 140 %, 2-px-Lichtkante), Bewegung nur über opacity und transform,
+   Touchziele mindestens 48 px, Lesetext mit Untergrenze (rem/clamp), Grafik und Rahmen am Maßstab --s. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+
+/* ---------- Maßstab: Entwurf 1088 px breit (iPad hoch) ---------- */
+:root { --s: calc(min(100vw, 1088px) / 1088); }
+@media (orientation: landscape) and (min-width: 820px) {
+  /* nie über 1: Sonst wächst die Schrift auf großen Bildschirmen, die Seite aber nicht (Ingos Monitor, 15.11.2026) */
+  :root { --s: min(1px, calc(100svh / 1010), calc(100vw / 1360)); }
+}
+@media (max-width: 640px) and (orientation: portrait) {
+  :root { --s: min(1px, calc(100vw / 600)); }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  font-family: var(--schrift-text);
+  font-size: var(--gr-text);
+  line-height: 1.4;
+  color: var(--navy);
+  background: var(--tiefe);
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;   /* Lichthof und Licht dürfen nicht seitlich überstehen (kein waagerechtes Scrollen) */
+}
+:focus-visible { outline: 3px solid var(--navy); outline-offset: 4px; }
+
+.nurvorlesen {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* ---------- Wasser, Licht, Blasen ---------- */
+.wasser {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background: linear-gradient(180deg, #e6f2ef 0%, #a9d4e1 30%, #3f86a8 70%, #12425f 100%);   /* Ersatz, solange das Bild lädt */
+}
+.wasser img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; display: block; }
+.licht, .blasen { position: absolute; z-index: -1; pointer-events: none; }
+.licht {
+  top: 0; left: 50%;
+  width: min(60rem, 100%); height: calc(560 * var(--s));
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 46% 64% at 50% 0%, rgba(255, 252, 235, 0.55), rgba(220, 244, 250, 0.2) 55%, transparent 80%);
+  opacity: 0.75;
+  animation: licht-atmen 11s ease-in-out infinite alternate;
+}
+@keyframes licht-atmen { to { opacity: 1; transform: translateX(-50%) scaleX(1.08); } }
+.blasen { inset: 0 0 auto; height: 100vh; height: 100svh; overflow: hidden; }
+.blasen span {
+  position: absolute; bottom: 0;
+  width: 0.875rem; aspect-ratio: 1; border-radius: 50%;
+  border: 1px solid rgba(235, 250, 255, 0.55);
+  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.7) 0 14%, rgba(200, 238, 250, 0.08) 40%, transparent 70%);
+  opacity: 0;
+  animation: blase-steigt 18s linear infinite;
+}
+.blasen span:nth-child(1) { left: 1%; animation-duration: 17s; animation-delay: -2s; }
+.blasen span:nth-child(2) { left: 2.4%; width: 0.5625rem; animation-duration: 22s; animation-delay: -11s; }
+.blasen span:nth-child(3) { left: 3.4%; width: 0.375rem; animation-duration: 15s; animation-delay: -7s; }
+.blasen span:nth-child(4) { right: 1%; width: 0.6875rem; animation-duration: 20s; animation-delay: -4s; }
+.blasen span:nth-child(5) { right: 2.6%; width: 0.4375rem; animation-duration: 16s; animation-delay: -13s; }
+.blasen span:nth-child(6) { right: 3.4%; width: 0.5625rem; animation-duration: 24s; animation-delay: -18s; }
+@keyframes blase-steigt {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  10% { opacity: 0.9; }
+  50% { transform: translate3d(10px, -50vh, 0); }
+  85% { opacity: 0.7; }
+  100% { transform: translate3d(-6px, -100vh, 0); opacity: 0; }
+}
+.ruht .licht, .ruht .blasen span { animation-play-state: paused; }
+
+/* ---------- Seite ---------- */
+.seite { max-width: 80rem; margin: 0 auto; padding: calc(96 * var(--s)) var(--a-m) var(--a-l); outline: none; }
+
+/* Kopf im Lichthof: Navy steht nur auf hellem Grund */
+.kopf { position: relative; text-align: center; margin: 0 auto var(--a-l); max-width: 44rem; }
+.kopf::before {
+  content: ''; position: absolute; z-index: -1; inset: -2.5rem -3rem;
+  background: radial-gradient(ellipse at 50% 45%, rgba(228, 243, 245, 0.88) 0%, rgba(228, 243, 245, 0.6) 45%, transparent 72%);
+  pointer-events: none;
+}
+.wortmarke {
+  font-family: var(--schrift-name); font-size: max(1rem, calc(31 * var(--s))); letter-spacing: -0.02em;
+  margin: 0 0 var(--a-s); display: inline-flex; flex-direction: column; align-items: center; gap: var(--a-xs);
+  color: var(--navy);
+}
+a.wortmarke { text-decoration: none; min-height: var(--tippen); justify-content: center; }
+.welle { width: 62px; height: 14px; stroke: var(--welle); }
+h1 { font-family: var(--schrift-name); font-weight: 500; font-size: var(--gr-display); line-height: 1.3; letter-spacing: -0.02em; margin: 0; }
+h2 { font-family: var(--schrift-name); font-weight: 400; font-size: var(--gr-title); line-height: 1.3; margin: var(--a-l) 0 var(--a-s); }
+h3 { font-family: var(--schrift-name); font-weight: 400; font-size: var(--gr-text); margin: var(--a-m) 0 var(--a-xs); }
+.unterzeile { margin: var(--a-s) 0 0; color: var(--navy-weich); font-size: var(--gr-text); }
+
+/* Nuri: gemaltes Bild, rund ausgeblendet, kein Rahmen, keine Bewegung */
+.nuri {
+  display: block; margin: var(--a-m) auto 0;
+  width: clamp(9rem, calc(300 * var(--s)), 18rem); height: auto; aspect-ratio: 1;
+  border-radius: 50%;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 56%, transparent 71%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 56%, transparent 71%);
+}
+
+/* ---------- Papier: helle Fläche für Formulare und Text ---------- */
+.papier {
+  background: var(--papier);
+  border: 1px solid var(--papier-linie);
+  border-radius: var(--r-papier);
+  padding: var(--a-l);
+  margin: var(--a-l) auto;
+  max-width: 40rem;
+  box-shadow: 0 18px 40px -18px var(--glas-schatten);
+}
+.papier > :first-child { margin-top: 0; }
+.papier > :last-child { margin-bottom: 0; }
+.papier p, .papier li { max-width: var(--zeile); }
+.papier a { color: var(--navy); }
+.leise { color: var(--tinte-leise); font-size: var(--gr-klein); }
+
+/* Formular */
+label { display: block; font-size: var(--gr-label); font-weight: 700; margin-bottom: var(--a-xs); }
+input[type="text"] {
+  font: inherit; color: var(--navy); background: var(--weiss);
+  border: 2px solid var(--navy-weich); border-radius: var(--r-knopf);
+  min-height: var(--tippen); padding: 0 var(--a-m); width: 100%;
+}
+.code-feld { max-width: 16rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.hinweis-feld { min-height: 1.45em; margin: var(--a-s) 0 0; font-weight: 700; }
+.hinweis-feld:empty { min-height: 0; }
+
+/* Knöpfe */
+.knopf {
+  font: inherit; font-size: var(--gr-label); font-weight: 700;
+  min-height: var(--tippen); min-width: var(--tippen); padding: 0 var(--a-l);
+  border-radius: var(--r-knopf); border: 2px solid var(--navy); background: var(--weiss); color: var(--navy);
+  cursor: pointer; transition: transform var(--dauer) var(--kurve);
+}
+.knopf:active { transform: scale(0.98); }
+.knopf[disabled] { opacity: 0.55; cursor: not-allowed; }
+.knopf.haupt { background: var(--navy); color: var(--weiss); }
+a.knopf { display: inline-flex; align-items: center; text-decoration: none; }
+.knopfreihe { display: flex; flex-wrap: wrap; gap: var(--a-s) var(--a-m); align-items: center; margin: var(--a-l) 0 0; }
+.knopfreihe--mitte { justify-content: center; }
+/* Ruhiger Glasknopf auf dem Wasser (z. B. Abmelden) */
+.knopf.glas-knopf {
+  background: rgba(10, 52, 84, 0.74); color: var(--weiss); border-color: var(--glas-kante);   /* 0.74: Weiß bleibt auch über hellem Sand über 4.5 : 1 */
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.knopf.glas-knopf:focus-visible { outline-color: var(--weiss); }
+
+/* ---------- Startseite: Stationen als Glasfenster ---------- */
+.netz-zeile { max-width: 40rem; margin: 0 auto var(--a-m); padding: var(--a-s) var(--a-m); background: var(--papier); border-radius: var(--r-knopf); font-size: var(--gr-klein); }
+.stationen {
+  list-style: none; margin: calc(40 * var(--s)) auto 0; padding: 0;
+  --spalten: 3;
+  --luecke: calc(36 * var(--s));
+  display: flex; flex-wrap: wrap; justify-content: center;   /* letzte Reihe mittig (3 + 2 im Hochformat) */
+  gap: var(--luecke);
+  max-width: 62rem;
+}
+/* Querformat: alle fünf nebeneinander, ohne Scrollen (Lernlagune: Querformat-ohne-Scrollen) */
+@media (orientation: landscape) and (min-width: 820px) {
+  .stationen { --spalten: 5; max-width: 80rem; }
+}
+.stationen > li { display: flex; flex: 0 1 calc((100% - (var(--spalten) - 1) * var(--luecke)) / var(--spalten) - 1px); min-width: 0; }
+@media (max-width: 560px) {
+  .stationen > li { flex-basis: 100%; max-width: 22rem; }
+}
+.station {
+  flex: 1; width: 100%; margin: 0; font: inherit;
+  container-type: inline-size;   /* für die Titelgröße (cqi) */
+  position: relative; display: flex; flex-direction: column; align-items: center; text-align: center;
+  min-height: calc(330 * var(--s));
+  padding: calc(44 * var(--s)) var(--a-m) calc(36 * var(--s));
+  border-radius: calc(72 * var(--s));
+  color: var(--weiss);
+  background: linear-gradient(180deg, rgba(214, 242, 252, 0.13), rgba(40, 110, 150, 0.06) 55%, rgba(8, 42, 70, 0.42));
+  border: 2px solid var(--glas-kante);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.62), inset 0 0 0 2px rgba(255, 255, 255, 0.16), inset 0 0 calc(22 * var(--s)) rgba(200, 240, 255, 0.38), 0 26px 50px -10px rgba(3, 20, 35, 0.38);
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  backdrop-filter: blur(6px) saturate(140%);
+}
+/* „Kommt bald“: dunkleres Nebelglas, damit kleine weiße Schrift auch über hellem Wasser AA erreicht */
+.station--bald { background: var(--nebel); }
+.station__name { display: block; margin: 0; font-family: var(--schrift-name); font-weight: 400; font-size: max(1.375rem, calc(40 * var(--s)));
+  font-size: clamp(min(1.25rem, 17cqi), 17cqi, 2.5rem);   /* richtet sich nach der Kartenbreite (Container), ältere Browser nehmen die Zeile davor */
+  max-width: 100%; hyphens: auto; overflow-wrap: anywhere; line-height: 1.3; text-shadow: 0 1px 3px rgba(4, 30, 50, 0.55); }
+.station__kurz { display: block; font-size: var(--gr-klein); line-height: 1.3; }
+/* Live-Station: ganzes Fenster ist der Knopf. Getöntes Glas (0.62 oben), damit kleine weiße Schrift AA erreicht. */
+.station--live {
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(10, 52, 84, 0.62), rgba(8, 42, 70, 0.78));
+  transition: transform var(--dauer) var(--kurve);
+}
+.station--live:active { transform: scale(0.975); }
+.station--live:focus-visible { outline: 3px solid var(--weiss); outline-offset: 6px; }
+@media (hover: hover) { .station--live:hover { transform: translateY(-6px); } }
+.stempel-punkte { display: inline-flex; gap: 0.5rem; margin-top: var(--a-s); }
+.stempel-punkt { display: inline-block; width: 1rem; height: 1rem; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, 0.85); vertical-align: middle; }
+.stempel-punkt--voll { border-style: solid; background: var(--weiss); box-shadow: inset 0 0 0 3px var(--welle); }
+.station__linie { width: 60%; height: 1px; margin: calc(14 * var(--s)) auto; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent); position: relative; }
+.station__linie::after { content: ''; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--weiss); box-shadow: 0 0 8px rgba(255, 255, 255, 0.8); }
+.station p { margin: 0; font-size: var(--gr-klein); line-height: 1.3; text-shadow: 0 1px 3px rgba(4, 30, 50, 0.55); }
+.station__bild { width: calc(120 * var(--s)); min-width: 4.5rem; height: auto; margin: auto 0 calc(10 * var(--s)); padding-top: calc(18 * var(--s)); }
+.station__bald { margin-top: var(--a-s) !important; font-size: var(--gr-label); opacity: 0.92; display: inline-flex; align-items: center; gap: 0.4em; }
+.schloss { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Stationsbilder (Code-Grafik, nur Zierde): Inhaltsfarben gedämpft, mit Muster */
+.sym { fill: none; stroke: rgba(255, 255, 255, 0.92); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.sym .sym-strom { stroke: rgba(205, 236, 245, 0.95); stroke-width: 2.6; }
+.sym .sym-strom--pfeil { stroke-width: 2.6; }
+.sym .sym-punkt { fill: var(--weiss); stroke: none; }
+.sym .sym-punkt--hohl { fill: none; stroke: var(--weiss); stroke-width: 2; }
+.sym .sym-kachel { fill: var(--papier); stroke: rgba(255, 255, 255, 0.95); stroke-width: 1.4; }
+.sym .sym-text { fill: var(--navy); stroke: none; font-family: var(--schrift-text); font-size: 11px; font-weight: 700; text-anchor: middle; }
+.sym .sym-zeile { stroke: rgba(255, 255, 255, 0.85); stroke-width: 2.4; }
+.sym .sym-plus { stroke: var(--weiss); stroke-width: 2.2; }
+.sym .sym-lupe { stroke: var(--weiss); stroke-width: 3; fill: rgba(200, 236, 255, 0.18); }
+.sym .sym-lupe--griff { stroke-width: 5; }
+.sym .sym-frage { stroke: rgba(255, 255, 255, 0.95); stroke-width: 3; }
+
+/* ---------- Erwachsenenbereich ---------- */
+.erwachsene summary { cursor: pointer; min-height: var(--tippen); display: flex; align-items: center; list-style-position: inside; }
+.erwachsene summary h2 { display: inline; margin: 0; font-size: var(--gr-text); }
+.erwachsene { max-width: 40rem; }
+
+/* ---------- Meldungen ---------- */
+.meldung-bereich { position: sticky; bottom: 0; display: flex; justify-content: center; padding: 0 var(--a-m) var(--a-m); pointer-events: none; }
+.meldung { pointer-events: auto; margin: 0; max-width: 40rem; padding: var(--a-s) var(--a-m); background: var(--navy); color: var(--weiss); border-radius: var(--r-knopf); font-size: var(--gr-klein); }
+.meldung:empty { display: none; }
+.vorschau-hinweis { margin: 0; padding: var(--a-s) var(--a-m); background: var(--navy); color: var(--weiss); text-align: center; font-size: var(--gr-klein); }
+
+/* ---------- Fuß: auf dunklem Nebelglas, damit Weiß lesbar bleibt ---------- */
+.fuss {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--a-s) var(--a-l);
+  width: fit-content; margin: var(--a-l) auto max(var(--a-l), env(safe-area-inset-bottom));
+  padding: 0 var(--a-l); border-radius: 999px;
+  background: rgba(10, 52, 84, 0.78);
+  font-size: var(--gr-klein);
+}
+.fuss a { color: var(--weiss); min-height: var(--tippen); display: inline-flex; align-items: center; }
+.fuss a:focus-visible { outline-color: var(--weiss); }
+.fuss a[aria-current="page"] { text-decoration: none; font-weight: 700; }
+
+/* ---------- Unterseiten (Datenschutz, Impressum) ---------- */
+.text-seite .papier { max-width: 46rem; }
+.text-seite .papier h2 { font-size: var(--gr-text); font-family: var(--schrift-text); font-weight: 700; }
+
+@media (hover: hover) {
+  .knopf.glas-knopf:hover { background: rgba(10, 52, 84, 0.86); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .licht { opacity: 0.8; }
+  .blasen { display: none; }
+}
+
+/* ---------- Fühlkiste (js/kiste.js): Holz, gedämpft ---------- */
+.kiste { display: block; width: 100%; max-width: 30rem; height: auto; margin: 0 auto; }
+.kiste__rueck { fill: #7a5536; stroke: #5c3e26; stroke-width: 2; }
+.kiste__innen { fill: #3f2a1a; }
+.kiste__kante { stroke: #a77b52; stroke-width: 10; stroke-linecap: round; }
+.kiste__deckel { fill: #8a6140; stroke: #5c3e26; stroke-width: 2; }
+.kiste__loch { fill: #24170e; }
+.kiste__tuch { fill: none; stroke: #c9b79a; stroke-width: 3; stroke-linecap: round; }
+.kugel__grund.k-blau { fill: var(--kugel-blau); }
+.kugel__grund.k-rot { fill: var(--kugel-rot); }
+.kugel__grund.k-gelb { fill: var(--kugel-gelb); }
+.kugel__grund.k-gruen { fill: var(--kugel-gruen); }
+.kugel__muster.m-streifen { fill: url(#m-streifen); }
+.kugel__muster.m-punkte { fill: url(#m-punkte); }
+.kugel__muster.m-karo { fill: url(#m-karo); }
+.kugel__glanz { fill: rgba(255, 255, 255, 0.35); }
+.kugel__rand { fill: none; stroke: rgba(20, 12, 6, 0.55); stroke-width: 1.5; }
+.kugel__zahl { font: 700 16px var(--schrift-text); text-anchor: middle; fill: #fff; stroke: rgba(10, 30, 45, 0.85); stroke-width: 3; paint-order: stroke; }
+.kugel--blass { opacity: 0.28; transition: opacity var(--dauer) var(--kurve); }
+.kugel--leer { fill: rgba(255, 255, 255, 0.06); stroke: rgba(255, 255, 255, 0.55); stroke-width: 2; stroke-dasharray: 5 5; }
+
+/* ---------- Säulendiagramm (js/saeulen.js) ---------- */
+.saeulen { display: block; width: 100%; max-width: 32rem; height: auto; margin: 0 auto; }
+.saeulen__achse { stroke: var(--navy); stroke-width: 2; }
+.saeulen__gitter { stroke: rgba(11, 49, 85, 0.18); stroke-width: 1; }
+.saeulen__tick, .saeulen__name, .saeulen__wert { font-family: var(--schrift-text); font-weight: 400; fill: var(--navy); }   /* Größe setzt js/saeulen.js */
+.saeulen__tick { text-anchor: end; }
+.saeulen__name, .saeulen__wert { text-anchor: middle; }
+.saeulen__wert { font-weight: 700; }
+.saeulen__balken.k-blau { fill: var(--kugel-blau); } .saeulen__balken.k-rot { fill: var(--kugel-rot); }
+.saeulen__balken.k-gelb { fill: var(--kugel-gelb); } .saeulen__balken.k-gruen { fill: var(--kugel-gruen); }
+.saeulen__balken.k-neutral { fill: var(--welle); }
+.saeulen__muster.m-streifen { fill: url(#m-streifen); } .saeulen__muster.m-punkte { fill: url(#m-punkte); } .saeulen__muster.m-karo { fill: url(#m-karo); }
+.saeulen__schatten { fill: rgba(11, 49, 85, 0.16); stroke: rgba(11, 49, 85, 0.45); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.haeufigkeiten { border-collapse: collapse; margin: var(--a-s) auto 0; font-size: var(--gr-klein); }
+.haeufigkeiten caption { font-weight: 700; padding-bottom: var(--a-xs); }
+.haeufigkeiten th, .haeufigkeiten td { border: 1px solid var(--papier-linie); padding: 0.25rem 0.75rem; text-align: center; }
+
+/* Erwachsenenbereich: Liste der Stationen, Tabelle Prinzip und Umsetzung */
+.erwachsene__liste { padding-left: 1.2em; }
+.erwachsene__liste li + li { margin-top: var(--a-xs); }
+.erwachsene__tabelle { overflow-x: auto; }
+.erwachsene__tabelle table { border-collapse: collapse; width: 100%; font-size: var(--gr-klein); }
+.erwachsene__tabelle th, .erwachsene__tabelle td { text-align: left; vertical-align: top; padding: var(--a-xs) var(--a-s); border-bottom: 1px solid var(--papier-linie); }
+.erwachsene__tabelle tbody th { font-weight: 700; min-width: 8rem; }
+
+/* ---------- Etappe 6b: Befunde aus dem Design-Review ---------- */
+/* A2: Gewählt und gesperrt bleibt deutlich (die eigene Vermutung bleibt neben dem Ergebnis stehen) */
+.knopf[aria-pressed="true"][disabled] { opacity: 1; background: var(--navy); color: var(--weiss); }
+/* A3: Fokusring zweifarbig, damit er auf Papier und über hellem Wasser sichtbar ist.
+   Innen ein heller Ring (box-shadow am Rand), außen Navy; auf Glas umgekehrt. */
+:focus-visible { outline: 3px solid var(--navy); outline-offset: 2px; box-shadow: 0 0 0 2px var(--weiss); }
+.knopf.glas-knopf:focus-visible, .fuss a:focus-visible, .pfeil-knopf:focus-visible { outline-color: var(--weiss); box-shadow: 0 0 0 2px var(--navy); }
+.station--live:focus-visible {
+  outline: 3px solid var(--weiss); outline-offset: 6px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.62), inset 0 0 0 2px rgba(255, 255, 255, 0.16), 0 0 0 6px var(--navy);
+}
+/* A4: „Stand“-Zeile auf Datenschutz und Impressum liegt auf Papier statt am Rand des Lichthofs */
+.kopf .stand { display: inline-block; margin: var(--a-s) 0 0; padding: 0.15rem var(--a-s); background: var(--papier); border-radius: var(--r-knopf); color: var(--navy); }
+/* A12: Aufklapper zeigen ihren Zustand (gezeichneter Winkel, dreht sich beim Öffnen); Unterüberschriften kleiner als die Überschrift */
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after {
+  content: ''; flex: none; width: 0.6rem; height: 0.6rem; margin-left: auto;
+  border-right: 2.5px solid currentColor; border-bottom: 2.5px solid currentColor;
+  transform: translateY(-25%) rotate(45deg); transition: transform var(--dauer) var(--kurve);
+}
+details[open] > summary::after { transform: translateY(25%) rotate(-135deg); }
+.erwachsene summary, .so-gehts summary, .am-tisch summary { gap: var(--a-m); }
+.erwachsene h3 { font-family: var(--schrift-text); font-weight: 700; font-size: var(--gr-label); margin: var(--a-l) 0 var(--a-xs); }
+/* A5: Tafel und Beamer (1920 × 1080) und große Bildschirme: alles eine Stufe größer, die Seite nutzt die Fläche.
+   Grundschrift 125 %: Alle rem-Größen (Schrift, Seite, Bühne, Rad) wachsen mit. --s darf bis 1,3 px wachsen,
+   bleibt aber an die Fensterhöhe gebunden (Ingos breiter, flacher Monitor). Der Layout-Test prüft 1920 × 1080 und 3280 × 1115. */
+@media (orientation: landscape) and (min-width: 1600px) and (min-height: 860px) {
+  html { font-size: 125%; }
+  :root { --s: min(1.3px, calc(100svh / 1010), calc(100vw / 1360)); }
+}
+
+/* 6b: keine einzelnen Wörter allein in der letzten Zeile (Schusterjungen); ältere Browser ignorieren es */
+p, li, dd, figcaption { text-wrap: pretty; }
+h1, h2, h3 { text-wrap: balance; }
+
+/* ---------- Etappe 6c (Finish-Review) ---------- */
+/* Querformat: Kartentitel unten bündig, damit Trennlinie und Unterzeile aller Karten auf einer Höhe liegen,
+   auch wenn „Kann das stimmen?“ zweizeilig ist */
+@media (orientation: landscape) and (min-width: 820px) {
+  .station__name { min-height: 2.6em; display: flex; align-items: flex-end; justify-content: center; }
+}
+/* Fokus auf dem Titel nach dem Weiterblättern: Ring bleibt, aber rund und mit Abstand (kein „Auswahlkasten“) */
+h1[tabindex="-1"] { border-radius: 0.6rem; }
+h1[tabindex="-1"]:focus-visible { outline-offset: 6px; }
+
+/* Erwachsenenbereich wie bei den Riff-Akten (Ingo, 15.11.2026): zugeklappt eine kleine Nebelglas-Pille
+   mit Pfeil links, damit Kinder nicht hineintippen; aufgeklappt helles Papier in voller Breite. */
+.erwachsene:not([open]) {
+  width: fit-content; max-width: 100%; margin: 0.6rem auto; padding: 0 1.1em;
+  border-radius: 999px; border: 0; box-shadow: none; background: var(--nebel); color: var(--weiss);
+  -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+}
+.erwachsene:not([open]) > summary { gap: 0.55em; }
+.erwachsene:not([open]) > summary h2 { font-family: var(--schrift-text); font-size: 1rem; font-weight: 700; color: inherit; }
+.erwachsene:not([open]) > summary::after { order: -1; margin-left: 0; transform: rotate(-45deg); }
+.erwachsene:not([open]) > summary:focus-visible { outline-color: var(--weiss); box-shadow: 0 0 0 2px var(--navy); border-radius: 999px; }

@@ -209,6 +209,10 @@ a.knopf { display: inline-flex; align-items: center; text-decoration: none; }
 .station__bald { margin-top: var(--a-s) !important; font-size: var(--gr-label); opacity: 0.92; display: inline-flex; align-items: center; gap: 0.4em; }
 .schloss { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
+/* ---------- Plattform gesperrt („Bald offen“, Lehrerbereich des Perlentauchers, 21.11.2026) ---------- */
+.zu h2 { display: flex; align-items: center; gap: 0.45em; }
+.zu h2 .schloss { flex: none; width: 0.9em; height: 0.9em; }
+
 
 /* ---------- Erwachsenenbereich ---------- */
 .erwachsene summary { cursor: pointer; min-height: var(--tippen); display: flex; align-items: center; list-style-position: inside; }
